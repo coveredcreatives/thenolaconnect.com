@@ -6,9 +6,9 @@ import (
 	alog "github.com/apex/log"
 	"github.com/twilio/twilio-go"
 
-	"gitlab.com/the-new-orleans-connection/qr-code/devtools"
-	communication_tools "gitlab.com/the-new-orleans-connection/qr-code/internal/communicator"
-	"gitlab.com/the-new-orleans-connection/qr-code/model"
+	"github.com/coveredcreatives/thenolaconnect.com/pkg/devtools"
+	communication_tools "github.com/coveredcreatives/thenolaconnect.com/pkg/internal/communicator"
+	"github.com/coveredcreatives/thenolaconnect.com/pkg/model"
 	"gorm.io/gorm"
 )
 

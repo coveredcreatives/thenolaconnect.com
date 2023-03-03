@@ -3,8 +3,8 @@ package internal
 import (
 	"time"
 
+	communication_tools "github.com/coveredcreatives/thenolaconnect.com/pkg/internal/communicator"
 	"github.com/twilio/twilio-go"
-	communication_tools "gitlab.com/the-new-orleans-connection/qr-code/internal/communicator"
 	"gorm.io/gorm"
 )
 

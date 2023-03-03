@@ -5,7 +5,7 @@ import (
 	alog "github.com/apex/log"
 	"github.com/twilio/twilio-go"
 
-	"gitlab.com/the-new-orleans-connection/qr-code/model"
+	"github.com/coveredcreatives/thenolaconnect.com/pkg/model"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )

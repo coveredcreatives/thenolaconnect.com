@@ -51,8 +51,8 @@ locals {
   web_application_dir = abspath("../web")
   admin_email = "darius.calliet@coveredcreatives.com"
   service_account_email = format("%s@appspot.gserviceaccount.com", data.google_project.new_orleans_connection.project_id)
-  default_pw = "eHon#X33S5P9XeLq"
-  domain = "thenolaconnect.com"
+  default_pw = var.database_password
+  domain = var.domain
 }
 
 # zip our code so we can store it for deployment

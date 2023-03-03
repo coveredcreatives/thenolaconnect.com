@@ -1,7 +1,7 @@
 package template
 
 import (
-	"gitlab.com/the-new-orleans-connection/qr-code/model"
+	"github.com/coveredcreatives/thenolaconnect.com/pkg/model"
 )
 
 type Page struct {

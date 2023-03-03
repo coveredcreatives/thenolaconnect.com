@@ -6,11 +6,11 @@ import (
 
 	"cloud.google.com/go/storage"
 	alog "github.com/apex/log"
-	"gitlab.com/the-new-orleans-connection/qr-code/devtools"
-	pgw_tools "gitlab.com/the-new-orleans-connection/qr-code/internal/pgw"
-	storage_tools "gitlab.com/the-new-orleans-connection/qr-code/internal/storage"
-	twilio_tools "gitlab.com/the-new-orleans-connection/qr-code/internal/twilio"
-	"gitlab.com/the-new-orleans-connection/qr-code/model"
+	"github.com/coveredcreatives/thenolaconnect.com/pkg/devtools"
+	pgw_tools "github.com/coveredcreatives/thenolaconnect.com/pkg/internal/pgw"
+	storage_tools "github.com/coveredcreatives/thenolaconnect.com/pkg/internal/storage"
+	twilio_tools "github.com/coveredcreatives/thenolaconnect.com/pkg/internal/twilio"
+	"github.com/coveredcreatives/thenolaconnect.com/pkg/model"
 	"gorm.io/gorm"
 )
 

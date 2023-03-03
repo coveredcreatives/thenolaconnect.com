@@ -8,10 +8,10 @@ import (
 	"cloud.google.com/go/storage"
 	"github.com/GoogleCloudPlatform/functions-framework-go/functions"
 	alog "github.com/apex/log"
-	"github.com/twilio/twilio-go"
-	"gitlab.com/the-new-orleans-connection/qr-code/devtools"
-	"gitlab.com/the-new-orleans-connection/qr-code/handlers"
-	internal_tools "gitlab.com/the-new-orleans-connection/qr-code/internal"
+	"github.com/coveredcreatives/thenolaconnect.com/pkg/devtools"
+	"github.com/coveredcreatives/thenolaconnect.com/pkg/handlers"
+	internal_tools "github.com/coveredcreatives/thenolaconnect.com/pkg/internal"
+	twilio "github.com/twilio/twilio-go"
 )
 
 func main() {

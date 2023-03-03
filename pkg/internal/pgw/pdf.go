@@ -6,8 +6,8 @@ import (
 	"net/http"
 
 	alog "github.com/apex/log"
-	"gitlab.com/the-new-orleans-connection/qr-code/devtools"
-	"gitlab.com/the-new-orleans-connection/qr-code/model"
+	"github.com/coveredcreatives/thenolaconnect.com/pkg/devtools"
+	"github.com/coveredcreatives/thenolaconnect.com/pkg/model"
 )
 
 func TriggerPDFConversionApi(pgw_env_config devtools.PDFGenerationWorkerServerConfig, pgw model.PDFGenerationWorker) (b []byte, err error) {

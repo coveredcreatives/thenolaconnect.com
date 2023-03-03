@@ -5,7 +5,7 @@ import (
 	"time"
 
 	alog "github.com/apex/log"
-	"gitlab.com/the-new-orleans-connection/qr-code/model"
+	"github.com/coveredcreatives/thenolaconnect.com/pkg/model"
 	"google.golang.org/api/forms/v1"
 	"gorm.io/gorm"
 )

@@ -4,7 +4,7 @@ import (
 	"time"
 
 	alog "github.com/apex/log"
-	"gitlab.com/the-new-orleans-connection/qr-code/model"
+	"github.com/coveredcreatives/thenolaconnect.com/pkg/model"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )

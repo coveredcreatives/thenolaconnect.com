@@ -2,11 +2,11 @@ package main
 
 import (
 	alog "github.com/apex/log"
+	"github.com/coveredcreatives/thenolaconnect.com/pkg/devtools"
+	form_tools "github.com/coveredcreatives/thenolaconnect.com/pkg/internal/forms"
+	twilio_tools "github.com/coveredcreatives/thenolaconnect.com/pkg/internal/twilio"
 	"github.com/twilio/twilio-go"
 	cli "github.com/urfave/cli/v2"
-	"gitlab.com/the-new-orleans-connection/qr-code/devtools"
-	form_tools "gitlab.com/the-new-orleans-connection/qr-code/internal/forms"
-	twilio_tools "gitlab.com/the-new-orleans-connection/qr-code/internal/twilio"
 
 	"google.golang.org/api/forms/v1"
 	"google.golang.org/api/option"

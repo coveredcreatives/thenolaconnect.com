@@ -12,9 +12,9 @@ import (
 	alog "github.com/apex/log"
 	"github.com/boombuler/barcode"
 	"github.com/boombuler/barcode/qr"
-	"gitlab.com/the-new-orleans-connection/qr-code/devtools"
-	storageTools "gitlab.com/the-new-orleans-connection/qr-code/internal/storage"
-	"gitlab.com/the-new-orleans-connection/qr-code/model"
+	"github.com/coveredcreatives/thenolaconnect.com/pkg/devtools"
+	storageTools "github.com/coveredcreatives/thenolaconnect.com/pkg/internal/storage"
+	"github.com/coveredcreatives/thenolaconnect.com/pkg/model"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )

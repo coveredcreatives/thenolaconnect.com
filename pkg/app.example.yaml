@@ -23,6 +23,3 @@ beta_settings:
 
 inbound_services:
   - warmup
-
-automatic_scaling:
-  min_instances: 1

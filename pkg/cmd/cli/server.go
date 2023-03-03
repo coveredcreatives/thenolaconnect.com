@@ -6,11 +6,11 @@ import (
 
 	"cloud.google.com/go/storage"
 	alog "github.com/apex/log"
+	"github.com/coveredcreatives/thenolaconnect.com/pkg/devtools"
+	"github.com/coveredcreatives/thenolaconnect.com/pkg/handlers"
+	internal_tools "github.com/coveredcreatives/thenolaconnect.com/pkg/internal"
 	"github.com/twilio/twilio-go"
 	cli "github.com/urfave/cli/v2"
-	"gitlab.com/the-new-orleans-connection/qr-code/devtools"
-	"gitlab.com/the-new-orleans-connection/qr-code/handlers"
-	internal_tools "gitlab.com/the-new-orleans-connection/qr-code/internal"
 	"google.golang.org/api/option"
 )
 

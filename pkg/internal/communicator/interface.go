@@ -3,7 +3,7 @@ package communicator
 import (
 	conversations_openapi "github.com/twilio/twilio-go/rest/conversations/v1"
 
-	"gitlab.com/the-new-orleans-connection/qr-code/model"
+	"github.com/coveredcreatives/thenolaconnect.com/pkg/model"
 )
 
 const AcceptOrderCode string = "1"

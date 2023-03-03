@@ -9,9 +9,9 @@ import (
 
 	"cloud.google.com/go/storage"
 	alog "github.com/apex/log"
+	internal_tools "github.com/coveredcreatives/thenolaconnect.com/pkg/internal"
+	"github.com/coveredcreatives/thenolaconnect.com/pkg/model"
 	"github.com/twilio/twilio-go"
-	internal_tools "gitlab.com/the-new-orleans-connection/qr-code/internal"
-	"gitlab.com/the-new-orleans-connection/qr-code/model"
 	"gorm.io/gorm"
 )
 
