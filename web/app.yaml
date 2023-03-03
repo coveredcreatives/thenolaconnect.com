@@ -1,0 +1,26 @@
+runtime: nodejs16
+handlers:
+  - url: /
+    static_files: build/index.html
+    upload: build/index.html
+    secure: always
+
+  - url: /qr-code
+    static_files: build/index.html
+    upload: build/index.html
+    secure: always
+
+  - url: /orders
+    static_files: build/index.html
+    upload: build/index.html
+    secure: always
+
+  - url: /orders/placement
+    static_files: build/index.html
+    upload: build/index.html
+    secure: always
+
+  - url: /(.*)$
+    static_files: build/\1
+    upload: build/(.*)
+    secure: always

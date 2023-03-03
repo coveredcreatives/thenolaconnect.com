@@ -1,6 +1,7 @@
 node/**/node_modules
 node/**/*.log
-web
+web/**/build
+web/**/node_modules
 pkg/cmd/app.yaml
 terraform/.terraform
 terraform/*.tfvars
