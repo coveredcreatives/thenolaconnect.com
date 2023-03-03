@@ -1,0 +1,1 @@
+INSERT INTO qr_mapping.file_storage_record (file_storage_url, created_at, updated_at, deleted_at) VALUES ('https://storage.googleapis.com/the_new_orleans_connection_company_assets/Catering Menu - Q4 2022.pdf', '2022-10-03 21:49:53.532722+00', '2022-10-03 21:49:53.532722+00', NULL) RETURNING file_storage_record_id;

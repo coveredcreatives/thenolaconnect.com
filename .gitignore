@@ -1,9 +1,8 @@
-cloud_sql_proxy.linux.amd64
-*.env
-*.env.sh
-pkg/the-new-orleans-connection-c42b40f02c07.json
-app.yaml
-build
-node_modules
-terraform
+node/**/node_modules
+node/**/*.log
+web
+pkg/cmd/app.yaml
+terraform/.terraform
+terraform/*.tfvars
+
 *.log

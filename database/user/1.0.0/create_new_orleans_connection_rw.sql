@@ -1,0 +1,1 @@
+create user new_orleans_connection_rw with password 'new_orleans_connection_rw#changeme';

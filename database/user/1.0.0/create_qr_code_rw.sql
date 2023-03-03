@@ -1,0 +1,1 @@
+create user qr_code_rw password 'qr_code_rw#changeme'

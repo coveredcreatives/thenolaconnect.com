@@ -1,0 +1,41 @@
+openapi: 3.1.0
+info:
+  title: qr mappings
+  summary: actions to manage QR code content
+  description: API supports the generation of QR code, additionally supports the direction to appropriate content via a stored hash map
+  version: 0.1.0
+  contact:
+    name: Covered Creatives
+    email: darius.calliet@coveredcreatives.com
+server:
+- url: https://api-dot-thenolaconnect.uc.r.appspot.com
+  description: Production Server
+/qr_mapping/generate:
+  post:
+    tags:
+    - qr_mapping
+    summary: generate a new qr image mapped to some media
+    operationId: qr_mapping_generate
+    requestBody:
+      content:
+        'application/x-www-form-urlencoded':
+          schema:
+          type: object
+          properties:
+              label: 
+                description: Value to label uploaded media
+                type: string
+              file:
+                description: Media to return when QR code is scanned
+                type: blob
+          required:
+            - label
+            - file
+    responses:
+      '201':
+        description: QR mapping updated
+        content: 
+          'image/png': {}
+
+
+

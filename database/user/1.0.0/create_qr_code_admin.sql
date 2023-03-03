@@ -1,0 +1,1 @@
+create user qr_code_db_admin with password 'qr_code_db_admin#changeme' createdb;

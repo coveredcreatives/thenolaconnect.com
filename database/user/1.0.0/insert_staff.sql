@@ -1,0 +1,2 @@
+-- existing staff
+insert into public.staff (email, phone_number, name, is_manager, created_at) values ('darius.calliet@coveredcreatives.com', '+13142859562', 'Darius Calliet', true, NOW()) returning staff_id;

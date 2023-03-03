@@ -1,18 +1,18 @@
-# QR Generator
+# The Nola Connect
 
-This QR generator borrows techniques from URL shortening systems and will allow for files within the original QR to be updated. The api service will support the generation and tracking of QR codes with their current and historical attachments.
+This repository contains the necessary components to support our client the new orleans connection.
 
-Expectations around beta release:
+Projects Underway include:
 
-User can store a file and receive a QR code that will return selected file.
-User can view all QR codes currently available.
-User can update the file that a QR will return.
+QR Generator
+
+Order Communications
+
+Infrastructure is mostly defined using terraform to interact with google cloud apis. Including networking, file storage buckets, database instances, project, etc.
+
+Applications are deployed under google app engine and must be invoked via the `gcloud` command tooling.
 
 # Getting Started - Frontend
-
-The Frontend interface is designed to support manipulating your store of QR codes and the items they map to. QR codes can be given a label, will automatically generate an appropriate QR code and will allow storage to an s3 bucket any items you would wish the QR code to return.
-
-To get started in the frontend:
 
 ```bash
 cd web
@@ -29,34 +29,37 @@ To get started in the backend we must run a node and a golang http server. The n
 To get connected to an empty database
 
 ```bash
+source [.local].env.sh
 cd pkg
-source ../export_env_local.sh
-go build ./cmd/cli; ./cli db
+go build ./cmd/cli
+./cli db
 ```
 
-The running database will print out helpful information (credentials, scripts to migrate and seed data), first change directories into the /database directory. Next, execute the commands sequentially.
+The running database will print out helpful information (connection details, scripts to migrate and seed data), first change directories into the /database directory. Next, execute the migrate and seed commands. It may be helpful to update .local.env.sh with the database port as it isn't expected to say the same between process executions. Otherwise you can pass in the appropriate environment variable as a prefix to running your dependent servers.
 
 ```bash
+source [.local].env.sh
 cd node/order2html
-source ./my-env.sh
-PGPORT=<check database initialization logs> npm start
+PGPORT=[database port] npm start
 ```
 
 ```bash
+source [.local].env.sh
 cd pkg/cmd/cli
-source ../export_env_local.sh
-go build .; DB_PORT=<check database initialization logs> ./cli server
+go build .
+DB_PORT=[database port] ./cli server
 ```
 
 For the server to properly interact with the database we need to sync the database with existing information from our 3rd party providers; twilio & google workspaces. This can be accomplished by running.
 
 ```bash
+source [.local].env.sh
 cd pkg/cmd/cli
-source ../export_env_local.sh
-go build .; DB_PORT=<check database initialization logs> ./cli sync
+go build .
+DB_PORT=[database port] ./cli sync
 ```
 
-For more commands use `help`
+For more commands use `./cli help`
 
 Google Forms Prefilled Link:
 

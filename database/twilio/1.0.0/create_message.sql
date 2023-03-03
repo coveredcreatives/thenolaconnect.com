@@ -1,0 +1,22 @@
+create table if not exists twilio.message (
+  body text,
+  num_segments varchar(20),
+  direction varchar(20),
+  from_pn varchar(20),
+  to_pn varchar(20),
+  date_updated text,
+  price varchar(20),
+  error_message varchar(20),
+  uri varchar(20),
+  account_sid varchar(34),
+  num_media varchar(20),
+  status varchar(20),
+  messaging_service_sid varchar(34),
+  sid varchar(34),
+  date_sent text,
+  date_created text,
+  error_code integer,
+  price_unit text,
+  api_version text,
+  subresource_uris text
+);
