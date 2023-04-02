@@ -14,13 +14,6 @@ variable "region" {
   description = "The region in Google Cloud where the resources will be deployed."
 }
 
-variable "twilio_api_secret" {
-  sensitive = true
-}
-variable "twilio_api_key" {
-
-}
-
 variable "database_password" {
   description = "Password to connect to database instance"
   sensitive   = true
