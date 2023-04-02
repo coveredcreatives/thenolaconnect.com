@@ -15,6 +15,7 @@ import (
 	"github.com/coveredcreatives/thenolaconnect.com/pkg/devtools"
 	storageTools "github.com/coveredcreatives/thenolaconnect.com/pkg/internal/storage"
 	"github.com/coveredcreatives/thenolaconnect.com/pkg/model"
+	"github.com/spf13/viper"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
@@ -56,10 +57,10 @@ func retrieveOne(w io.Writer, r *http.Request, db *gorm.DB, storagec *storage.Cl
 	return filestoragerecord.FileStoragedUrl, nil
 }
 
-func generate(w io.Writer, r *http.Request, db *gorm.DB, storagec *storage.Client) barcode.Barcode {
+func generate(w io.Writer, r *http.Request, db *gorm.DB, storagec *storage.Client, v *viper.Viper) barcode.Barcode {
 	entry := alog.WithField("path", "pkg.handlers.generate.(generate)")
 	entry.Info("BEGIN")
-	googleapplicationconfig, err := devtools.GoogleApplicationConfigFromEnv()
+	googleapplicationconfig, err := devtools.GoogleApplicationLoadConfig(v)
 	if err != nil {
 		alog.WithError(err).Error("failed to find Google Application config")
 		_, _ = w.Write([]byte("bad request"))
@@ -91,13 +92,13 @@ func generate(w io.Writer, r *http.Request, db *gorm.DB, storagec *storage.Clien
 	qrMapping := &model.QRMapping{}
 	qrencodeddata := b64.URLEncoding.EncodeToString([]byte(label))
 
-	qrcodeconfig, err := devtools.QRCodeConfigFromEnv()
+	applicationconfig, err := devtools.ApplicationLoadConfig(v)
 	if err != nil {
 		alog.WithError(err).Error("failed to find QR mapping")
 		_, _ = w.Write([]byte("bad request"))
 	}
 
-	retrieveURL := fmt.Sprintf("https://%s/retrieve?qr_encoded_data=%s", qrcodeconfig.EnvRetrieveHTTPSTriggerUrl, qrencodeddata)
+	retrieveURL := fmt.Sprintf("https://%s/retrieve?qr_encoded_data=%s", applicationconfig.EnvRetrieveHTTPSTriggerUrl, qrencodeddata)
 	alog.WithField("url", retrieveURL).Info("stored retrieveURL for code")
 	qrCode, _ := qr.Encode(retrieveURL, qr.L, qr.Auto)
 	qrCode, _ = barcode.Scale(qrCode, 512, 512)

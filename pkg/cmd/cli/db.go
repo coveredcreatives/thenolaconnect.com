@@ -14,6 +14,7 @@ import (
 	"github.com/coveredcreatives/thenolaconnect.com/pkg/devtools"
 	"github.com/coveredcreatives/thenolaconnect.com/pkg/model"
 	"github.com/docker/go-connections/nat"
+	"github.com/spf13/viper"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
 	cli "github.com/urfave/cli/v2"
@@ -22,8 +23,8 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-func ContainerDatabase(ctx *cli.Context) (func(), error) {
-	terminate, _, err := SetupPostgresContainer(log.Default())
+func ContainerDatabase(ctx *cli.Context, v *viper.Viper) (func(), error) {
+	terminate, _, err := SetupPostgresContainer(log.Default(), v)
 	if err != nil {
 		alog.WithError(err).Error("failed to setup postgres container")
 		return terminate, err
@@ -44,25 +45,6 @@ func ContainerDatabase(ctx *cli.Context) (func(), error) {
 	log.Println("\nto connect an active session: ")
 	log.Println("psql -U ", os.Getenv("DB_USERNAME"), " -h ", os.Getenv("DB_HOSTNAME"), " -p ", os.Getenv("DB_PORT"), "-d", os.Getenv("DB_NAME"))
 
-	// gormconfig := devtools.GormConfig()
-
-	// gormdb, err := gorm.Open(postgres.New(postgres.Config{
-	// 	Conn: db,
-	// }), gormconfig)
-	// if err != nil {
-	// 	alog.WithError(err).Error("unable to initialize gorm")
-	// 	return terminate, err
-	// }
-
-	// Migrate database based on project models
-	// for key, table := range model.Tables([]string{}) {
-	// 	alog.WithField("name", key).Info("migrating table")
-	// 	err = gormdb.AutoMigrate(table)
-	// 	if err != nil {
-	// 		alog.WithField("name", key).WithError(err).Error("unable to migrate table")
-	// 		return terminate, err
-	// 	}
-	// }
 	return terminate, nil
 }
 
@@ -77,10 +59,10 @@ func (g *TestLogConsumer) Accept(l testcontainers.Log) {
 // SetupPostgresContainer will create a docker container for a postgres image
 // for our subsequent tests to connect to, will set appropriate env variables
 // to allow dal on the same process to access connection details
-func SetupPostgresContainer(logger *log.Logger) (func(), *sql.DB, error) {
+func SetupPostgresContainer(logger *log.Logger, v *viper.Viper) (func(), *sql.DB, error) {
 	ctx := context.Background()
 
-	config, err := devtools.DatabaseConnectionConfigFromEnv()
+	config, err := devtools.DatabaseConnectionLoadConfig(v)
 	if err != nil {
 		return nil, nil, err
 	}

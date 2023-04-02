@@ -9,20 +9,21 @@ import (
 	"github.com/coveredcreatives/thenolaconnect.com/pkg/devtools"
 	"github.com/coveredcreatives/thenolaconnect.com/pkg/handlers"
 	internal_tools "github.com/coveredcreatives/thenolaconnect.com/pkg/internal"
+	"github.com/spf13/viper"
 	"github.com/twilio/twilio-go"
 	cli "github.com/urfave/cli/v2"
 	"google.golang.org/api/option"
 )
 
-func Server(ctx *cli.Context) error {
-	googleauthconfig, err := devtools.GoogleApplicationConfigFromEnv()
+func Server(ctx *cli.Context, v *viper.Viper) error {
+	googleauthconfig, err := devtools.GoogleApplicationLoadConfig(v)
 	if err != nil {
 		alog.WithError(err).Error("missing require google application configuration")
 	}
 
 	google_client_option := option.WithCredentialsFile(googleauthconfig.EnvGoogleApplicationCredentials)
 
-	dbconfig, err := devtools.DatabaseConnectionConfigFromEnv()
+	dbconfig, err := devtools.DatabaseConnectionLoadConfig(v)
 	if err != nil {
 		alog.WithError(err).Error("missing required database configuration")
 		return err
@@ -39,7 +40,7 @@ func Server(ctx *cli.Context) error {
 		return err
 	}
 
-	twilioconfig, err := devtools.TwilioConfigFromEnv()
+	twilioconfig, err := devtools.TwilioLoadConfig(v)
 	if err != nil {
 		alog.WithError(err).Error("missing required twilio configuration")
 		return err
@@ -52,7 +53,7 @@ func Server(ctx *cli.Context) error {
 
 	orderchan := make(chan int)
 
-	go internal_tools.ChannelOrdersToPrinter(gormdb, orderchan)
+	go internal_tools.ChannelOrdersToPrinter(v, gormdb, orderchan)
 
 	router := http.NewServeMux()
 
@@ -60,25 +61,25 @@ func Server(ctx *cli.Context) error {
 		response.Write([]byte("ok"))
 	})
 
-	router.HandleFunc("/qr_mapping/generate", handlers.Generate(gormdb, storage_client))
+	router.HandleFunc("/qr_mapping/generate", handlers.Generate(gormdb, storage_client, v))
 	router.HandleFunc("/qr_mapping/list", handlers.Retrieve(gormdb, storage_client))
 	router.HandleFunc("/qr_mapping/retrieve", handlers.Retrieve(gormdb, storage_client))
 
-	router.HandleFunc("/order_communication/generate", handlers.GenerateOrder(gormdb, storage_client, twilio_client))
+	router.HandleFunc("/order_communication/generate", handlers.GenerateOrder(v, gormdb, storage_client, twilio_client))
 	router.HandleFunc("/order_communication/list", handlers.ListOrders(gormdb))
 	router.HandleFunc("/order_communication/deliver_to_kitchen", handlers.DeliverOrderToKitchen(gormdb, twilio_client, orderchan))
-	router.HandleFunc("/order_communication/sms", handlers.SMS(gormdb, twilio_client, orderchan))
+	router.HandleFunc("/order_communication/sms", handlers.SMS(v, gormdb, twilio_client, orderchan))
 
-	order_communication_config, err := devtools.OrderCommunicationConfigFromEnv()
+	application_config, err := devtools.ApplicationLoadConfig(v)
 	if err != nil {
 		alog.WithError(err).Error("missing required database configuration")
 		return err
 	}
 
-	alog.WithField("port", order_communication_config.EnvHTTPPort).Info("server listening")
+	alog.WithField("port", application_config.EnvHTTPPort).Info("server listening")
 
-	if err := http.ListenAndServe(fmt.Sprint(":", order_communication_config.EnvHTTPPort), router); err != nil {
-		alog.WithError(err).Error(fmt.Sprint("unable to run server on port :", order_communication_config.EnvHTTPPort))
+	if err := http.ListenAndServe(fmt.Sprint(":", application_config.EnvHTTPPort), router); err != nil {
+		alog.WithError(err).Error(fmt.Sprint("unable to run server on port :", application_config.EnvHTTPPort))
 		return err
 	}
 

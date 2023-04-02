@@ -1,5 +1,5 @@
 import * as React from 'react';
-import api, { URL } from "../http"
+import api, { getApiURL } from "../http"
 import { useQuery } from '@tanstack/react-query'
 
 import { UploadOutlined } from '@ant-design/icons';
@@ -132,6 +132,7 @@ function ListQRMappings({ isLoading, isError, data }) {
 
     if (isError === true) return "Error fetching data"
 
+    const URL = getApiURL();
     return (
         <Row>
             <Col>

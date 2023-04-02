@@ -1,30 +1,14 @@
-# enable compute service
-resource "google_project_service" "cm" {
-  project = data.google_project.new_orleans_connection.project_id
-  service = "compute.googleapis.com"
-
-  disable_dependent_services = true
-  disable_on_destroy         = false
-}
-
-# enable service networking 
-resource "google_project_service" "sn" {
-  project = data.google_project.new_orleans_connection.project_id
-  service = "servicenetworking.googleapis.com"
-
-  disable_dependent_services = true
-  disable_on_destroy         = false
-}
-# Reserve an external IP
+# Create External Static IP Address
 resource "google_compute_global_address" "external_ip" {
   name         = "app-lb-ip"
   provider     = google
   address_type = "EXTERNAL"
   ip_version   = "IPV4"
   project      = data.google_project.new_orleans_connection.project_id
-  description  = "External static IP address for React app"
+  description  = "External IPV4 address"
 }
 
+# Output network value
 output "external_ip" {
   value       = google_compute_global_address.external_ip.address
   description = "External static IP address for React app"
@@ -76,7 +60,7 @@ resource "google_compute_project_default_network_tier" "default" {
 resource "google_compute_backend_bucket" "static_site" {
   provider    = google
   name        = "qr-code-react-storage-bucket"
-  description = "Contains files needed by the qr-code website"
+  description = "Connect source code within bucket to CDN to serve"
   bucket_name = google_storage_bucket.web_http.name
   enable_cdn  = true
 }
@@ -87,7 +71,7 @@ resource "google_compute_managed_ssl_certificate" "web" {
   name     = "ssl-certificate"
   project  = data.google_project.new_orleans_connection.project_id
   managed {
-    domains = [local.domain, format("www.%s", local.domain)]
+    domains = [var.domain, format("www.%s", var.domain)]
   }
 }
 
@@ -103,7 +87,7 @@ resource "google_compute_url_map" "web_https" {
   }
 
   path_matcher {
-    name = "qrmapping"
+    name            = "qrmapping"
     default_service = google_compute_backend_bucket.static_site.id
 
     path_rule {
@@ -111,7 +95,6 @@ resource "google_compute_url_map" "web_https" {
       service = google_compute_backend_bucket.static_site.id
     }
   }
-
 }
 
 # GCP target proxy HTTPS

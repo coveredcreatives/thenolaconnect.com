@@ -10,7 +10,7 @@ type Answer struct {
 	QuestionId     string         `json:"questionId" gorm:"column:question_id"`
 	FormId         string         `json:"formId" gorm:"form_id"`
 	FormResponseId string         `json:"formResponseId" gorm:"form_response_id"`
-	TextAnswers    string         `json:"textAnswers" gorm:"text_answers"`
+	TextAnswers    string         `json:"textAnswers" gorm:"text_answers;serializer:json"`
 	CreatedAt      time.Time      `json:"created_at" gorm:"column:created_at"`
 	UpdatedAt      time.Time      `json:"updated_at" gorm:"column:updated_at"`
 	DeletedAt      gorm.DeletedAt `json:"deleted_at" gorm:"column:deleted_at"`

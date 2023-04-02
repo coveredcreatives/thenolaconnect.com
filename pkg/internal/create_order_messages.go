@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	alog "github.com/apex/log"
+	"github.com/spf13/viper"
 	"github.com/twilio/twilio-go"
 
 	"github.com/coveredcreatives/thenolaconnect.com/pkg/devtools"
@@ -12,10 +13,10 @@ import (
 	"gorm.io/gorm"
 )
 
-func CreateOrderMessage(db *gorm.DB, twilioc *twilio.RestClient) (err error) {
+func CreateOrderMessage(v *viper.Viper, db *gorm.DB, twilioc *twilio.RestClient) (err error) {
 	defer alog.Trace("CreateOrderMessage").Stop(&err)
 
-	twilio_env_config, err := devtools.TwilioConfigFromEnv()
+	twilio_env_config, err := devtools.TwilioLoadConfig(v)
 	if err != nil {
 		return
 	}
@@ -49,7 +50,7 @@ func CreateOrderMessage(db *gorm.DB, twilioc *twilio.RestClient) (err error) {
 	err = cc.
 		Append(&communication_tools.NewOrderCommunicator{Db: db, OrderId: order.OrderId}).
 		Append(&communication_tools.BacklogOrderCommunicator{Db: db, OrderId: order.OrderId}).
-		Run(db, twilioc, "")
+		Run(v, db, twilioc, "")
 
 	return
 }

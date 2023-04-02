@@ -7,12 +7,13 @@ import (
 	alog "github.com/apex/log"
 	"github.com/coveredcreatives/thenolaconnect.com/pkg/devtools"
 	"github.com/coveredcreatives/thenolaconnect.com/pkg/model"
+	"github.com/spf13/viper"
 	"gorm.io/gorm"
 )
 
-func OrderToPrinterChannel(db *gorm.DB, order_id int) (order model.Order, err error) {
+func OrderToPrinterChannel(v *viper.Viper, db *gorm.DB, order_id int) (order model.Order, err error) {
 	alog.WithField("order_id", order_id).Trace("OrderToPrinterChannel").Stop(&err)
-	order_communication_config, err := devtools.OrderCommunicationConfigFromEnv()
+	order_communication_config, err := devtools.ApplicationLoadConfig(v)
 	if err != nil {
 		return
 	}

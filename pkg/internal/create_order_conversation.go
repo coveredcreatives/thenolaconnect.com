@@ -7,15 +7,16 @@ import (
 	alog "github.com/apex/log"
 	"github.com/coveredcreatives/thenolaconnect.com/pkg/devtools"
 	"github.com/coveredcreatives/thenolaconnect.com/pkg/model"
+	"github.com/spf13/viper"
 	"github.com/twilio/twilio-go"
 	conversations_openapi "github.com/twilio/twilio-go/rest/conversations/v1"
 	"gorm.io/gorm"
 )
 
-func CreateOrderConversation(db *gorm.DB, twilioc *twilio.RestClient) (order model.Order, is_blocked bool, err error) {
+func CreateOrderConversation(v *viper.Viper, db *gorm.DB, twilioc *twilio.RestClient) (order model.Order, is_blocked bool, err error) {
 	defer alog.Trace("createOrderConversation").Stop(&err)
 
-	twilio_env_config, err := devtools.TwilioConfigFromEnv()
+	twilio_env_config, err := devtools.TwilioLoadConfig(v)
 	if err != nil {
 		return
 	}

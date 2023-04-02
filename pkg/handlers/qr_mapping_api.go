@@ -6,8 +6,16 @@ import (
 
 	"cloud.google.com/go/storage"
 	alog "github.com/apex/log"
+	"github.com/spf13/viper"
+	"github.com/twilio/twilio-go"
 	"gorm.io/gorm"
 )
+
+func LoadV1QRMappingAPI(v *viper.Viper, router *http.ServeMux, gormdb *gorm.DB, storage_client *storage.Client, twilio_client *twilio.RestClient, orderchan chan int) {
+	router.HandleFunc("/v1/qr_mapping/generate", Generate(gormdb, storage_client, v))
+	router.HandleFunc("/v1/qr_mapping/list", Retrieve(gormdb, storage_client))
+	router.HandleFunc("/v1/qr_mapping/retrieve", Retrieve(gormdb, storage_client))
+}
 
 func Retrieve(db *gorm.DB, storagec *storage.Client) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -35,12 +43,12 @@ func Retrieve(db *gorm.DB, storagec *storage.Client) http.HandlerFunc {
 // on its name matching the provided label. Matching QR is pulled from
 // the bucket. If no match is found, a QR code will be created and uploaded
 // the bucket.
-func Generate(db *gorm.DB, storagec *storage.Client) http.HandlerFunc {
+func Generate(db *gorm.DB, storagec *storage.Client, v *viper.Viper) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		entry := alog.WithField("path", "pkg.handlers.generate.(GenerateQRHandler)")
 		cors(w, r)
 		entry.Info("BEGIN")
-		qrCode := generate(w, r, db, storagec)
+		qrCode := generate(w, r, db, storagec, v)
 		_ = png.Encode(w, qrCode)
 		entry.Info("END")
 	})

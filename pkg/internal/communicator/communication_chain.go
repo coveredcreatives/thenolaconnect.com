@@ -7,6 +7,7 @@ import (
 	alog "github.com/apex/log"
 	"github.com/coveredcreatives/thenolaconnect.com/pkg/devtools"
 	"github.com/coveredcreatives/thenolaconnect.com/pkg/model"
+	"github.com/spf13/viper"
 	"github.com/twilio/twilio-go"
 	conversations_openapi "github.com/twilio/twilio-go/rest/conversations/v1"
 	"gorm.io/gorm"
@@ -30,10 +31,10 @@ func (cc *CommunicationChain) Append(c Communicator) *CommunicationChain {
 	return cc
 }
 
-func (c *CommunicationChain) Run(db *gorm.DB, twilioc *twilio.RestClient, body string) (err error) {
+func (c *CommunicationChain) Run(v *viper.Viper, db *gorm.DB, twilioc *twilio.RestClient, body string) (err error) {
 	defer alog.WithField("Communicator.Name", reflect.TypeOf(c.c).Elem().Name()).Trace("Run").Stop(&err)
 
-	twilio_env_config, err := devtools.TwilioConfigFromEnv()
+	twilio_env_config, err := devtools.TwilioLoadConfig(v)
 	if err != nil {
 		return
 	}
@@ -49,7 +50,7 @@ func (c *CommunicationChain) Run(db *gorm.DB, twilioc *twilio.RestClient, body s
 	}
 
 	if is_fulfilled {
-		err = traverse(c, db, twilioc, body)
+		err = traverse(c, v, db, twilioc, body)
 		return
 	}
 
@@ -79,7 +80,7 @@ func (c *CommunicationChain) Run(db *gorm.DB, twilioc *twilio.RestClient, body s
 	}
 
 	time.Sleep(time.Duration(1) * time.Second)
-	err = traverse(c, db, twilioc, body)
+	err = traverse(c, v, db, twilioc, body)
 	return
 }
 
@@ -122,9 +123,9 @@ func deliverResponseToTwilio(twilioc *twilio.RestClient, c *CommunicationChain, 
 	return
 }
 
-func traverse(c *CommunicationChain, db *gorm.DB, twilioc *twilio.RestClient, body string) (err error) {
+func traverse(c *CommunicationChain, v *viper.Viper, db *gorm.DB, twilioc *twilio.RestClient, body string) (err error) {
 	if c.next != nil {
-		err = c.next.Run(db, twilioc, body)
+		err = c.next.Run(v, db, twilioc, body)
 		return
 	}
 	return

@@ -33,10 +33,6 @@ func (l *Logger) Log(ctx context.Context, level pgx.LogLevel, msg string, data m
 }
 
 func DatabaseConnection(context context.Context, config DatabaseConnectionConfig) (*gorm.DB, error) {
-	if config.EnvDBUsername == "" {
-		alog.Error("one of DB_USER or DB_IAM_USER must be defined")
-	}
-	alog.WithField("config", config).Info("attempted to fetch db config from env")
 	dsn := ""
 	if config.EnvDBUsername != "" {
 		dsn = dsn + fmt.Sprint("user=", config.EnvDBUsername)

@@ -1,13 +1,18 @@
 import axios from "axios";
 
-export const localURI = `localhost:3001`;
+const isLocalHost = window.location.origin.includes('localhost');
 
-export const baseURI = `us-central1-the-new-orleans-connection.cloudfunctions.net`;
+export const getApiURL = () => {
+    if (isLocalHost) {
+        return 'http://127.0.0.1:3001';
+    }
 
-export const URL = (process.env.NODE_ENV === 'production') ? `https://${baseURI}` : `http://${localURI}`;
+    return 'http://127.0.0.1:3001';
+};
+
 
 export const httpClient = axios.create({
-    baseURL: URL,
+    baseURL: getApiURL(),
 });
 
 const api = {

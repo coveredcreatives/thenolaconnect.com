@@ -3,8 +3,9 @@ package main
 import (
 	alog "github.com/apex/log"
 	"github.com/coveredcreatives/thenolaconnect.com/pkg/devtools"
-	form_tools "github.com/coveredcreatives/thenolaconnect.com/pkg/internal/forms"
-	twilio_tools "github.com/coveredcreatives/thenolaconnect.com/pkg/internal/twilio"
+	internal_tools "github.com/coveredcreatives/thenolaconnect.com/pkg/internal"
+	"github.com/spf13/viper"
+
 	"github.com/twilio/twilio-go"
 	cli "github.com/urfave/cli/v2"
 
@@ -12,8 +13,8 @@ import (
 	"google.golang.org/api/option"
 )
 
-func SynchronizeDB(ctx *cli.Context) error {
-	googleauthconfig, err := devtools.GoogleApplicationConfigFromEnv()
+func SynchronizeDB(ctx *cli.Context, v *viper.Viper) error {
+	googleauthconfig, err := devtools.GoogleApplicationLoadConfig(v)
 	if err != nil {
 		alog.WithError(err).Error("missing require google application configuration")
 	}
@@ -25,7 +26,7 @@ func SynchronizeDB(ctx *cli.Context) error {
 		alog.WithError(err).Error("unable to initialize new service")
 	}
 
-	dbconfig, err := devtools.DatabaseConnectionConfigFromEnv()
+	dbconfig, err := devtools.DatabaseConnectionLoadConfig(v)
 	if err != nil {
 		alog.WithError(err).Error("missing required database configuration")
 		return err
@@ -36,7 +37,7 @@ func SynchronizeDB(ctx *cli.Context) error {
 		return err
 	}
 
-	twilio_env_config, err := devtools.TwilioConfigFromEnv()
+	twilio_env_config, err := devtools.TwilioLoadConfig(v)
 	if err != nil {
 		alog.WithError(err).Error("missing required twilio configuration")
 		return err
@@ -47,21 +48,8 @@ func SynchronizeDB(ctx *cli.Context) error {
 		Password: twilio_env_config.EnvAccountAuthToken,
 	})
 
-	form_tools.ListFormSynchronizeDB(gormdb, forms_service, googleauthconfig.EnvGoogleFormIdOrders)
-
-	if form_tools.ListFormResponsesSynchronizeDB(gormdb, forms_service, googleauthconfig.EnvGoogleFormIdOrders, "") != nil {
-		return err
-	}
-
-	if twilio_tools.ListPhoneNumbersSynchronizeDB(gormdb, twilioc, twilio_env_config.EnvAccountSid) != nil {
-		return err
-	}
-
-	if twilio_tools.FetchAccountSynchronizeToDB(gormdb, twilioc, twilio_env_config.EnvAccountSid) != nil {
-		return err
-	}
-
-	if twilio_tools.FetchServiceSynchronizeDB(gormdb, twilioc, twilio_env_config.EnvConversationServiceSid, twilio_env_config.EnvMessagingServiceSid) != nil {
+	err = internal_tools.SynchronizeDB(v, forms_service, gormdb, twilioc)
+	if err != nil {
 		return err
 	}
 

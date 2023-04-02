@@ -11,31 +11,27 @@ import (
 	storage_tools "github.com/coveredcreatives/thenolaconnect.com/pkg/internal/storage"
 	twilio_tools "github.com/coveredcreatives/thenolaconnect.com/pkg/internal/twilio"
 	"github.com/coveredcreatives/thenolaconnect.com/pkg/model"
+	"github.com/spf13/viper"
 	"gorm.io/gorm"
 )
 
-func StreamPDFStoStorage(db *gorm.DB, storagec *storage.Client, pgwchan <-chan model.PDFGenerationWorker, donechan chan<- bool) (err error) {
+func StreamPDFStoStorage(v *viper.Viper, db *gorm.DB, storagec *storage.Client, pgwchan <-chan model.PDFGenerationWorker, donechan chan<- bool) (err error) {
 	defer alog.Trace("streamPDFStoStorage").Stop(&err)
 	now := time.Now()
 
-	pgw_env_config, err := devtools.PDFGenerationWorkerServerConfigFromEnv()
+	google_env_config, err := devtools.GoogleApplicationLoadConfig(v)
 	if err != nil {
 		return
 	}
 
-	google_env_config, err := devtools.GoogleApplicationConfigFromEnv()
-	if err != nil {
-		return
-	}
-
-	twilio_env_config, err := devtools.TwilioConfigFromEnv()
+	twilio_env_config, err := devtools.TwilioLoadConfig(v)
 	if err != nil {
 		return
 	}
 
 	for pgw := range pgwchan {
 		var b []byte
-		b, err = pgw_tools.TriggerPDFConversionApi(pgw_env_config, pgw)
+		b, err = pgw_tools.BuildOrderHTML(db, pgw)
 		if err != nil {
 			return
 		}

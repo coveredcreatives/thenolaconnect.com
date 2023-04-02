@@ -11,7 +11,9 @@ import (
 	alog "github.com/apex/log"
 	internal_tools "github.com/coveredcreatives/thenolaconnect.com/pkg/internal"
 	"github.com/coveredcreatives/thenolaconnect.com/pkg/model"
+	"github.com/spf13/viper"
 	"github.com/twilio/twilio-go"
+	"google.golang.org/api/forms/v1"
 	"gorm.io/gorm"
 )
 
@@ -32,7 +34,7 @@ func listOrders(w io.Writer, r *http.Request, db *gorm.DB) (b []byte, err error)
 	return
 }
 
-func generateOrder(w io.Writer, r *http.Request, db *gorm.DB, storagec *storage.Client, twilioc *twilio.RestClient) (b []byte, err error) {
+func generateOrder(v *viper.Viper, w io.Writer, r *http.Request, db *gorm.DB, storagec *storage.Client, twilioc *twilio.RestClient) (b []byte, err error) {
 	defer alog.Trace("generateOrder").Stop(&err)
 	var valid_count int64
 	tx := db.Model(&model.FormResponse{}).Where("response_id NOT IN (?)", db.Model(&model.Order{}).Select("form_response_id")).Count(&valid_count)
@@ -54,14 +56,14 @@ func generateOrder(w io.Writer, r *http.Request, db *gorm.DB, storagec *storage.
 
 	go internal_tools.CreatePDFGenerationWorkers(db, orderchan, pgwchan, errchan)
 
-	go internal_tools.StreamPDFStoStorage(db, storagec, pgwchan, donechan)
+	go internal_tools.StreamPDFStoStorage(v, db, storagec, pgwchan, donechan)
 
 	for {
 		select {
 		case err = <-errchan:
 			return
 		case <-donechan:
-			_, _, err = internal_tools.CreateOrderConversation(db, twilioc)
+			_, _, err = internal_tools.CreateOrderConversation(v, db, twilioc)
 			if err != gorm.ErrRecordNotFound && err != nil {
 				return
 			}
@@ -69,7 +71,7 @@ func generateOrder(w io.Writer, r *http.Request, db *gorm.DB, storagec *storage.
 				err = nil
 				return
 			}
-			err = internal_tools.CreateOrderMessage(db, twilioc)
+			err = internal_tools.CreateOrderMessage(v, db, twilioc)
 			if err == gorm.ErrRecordNotFound {
 				err = nil
 			}
@@ -96,7 +98,7 @@ func deliverOrderToKitchen(w io.Writer, r *http.Request, db *gorm.DB, twilioc *t
 	return
 }
 
-func sms(w io.Writer, r *http.Request, db *gorm.DB, twilioc *twilio.RestClient, orderchan chan<- int) (b []byte, err error) {
+func sms(v *viper.Viper, w io.Writer, r *http.Request, db *gorm.DB, twilioc *twilio.RestClient, orderchan chan<- int) (b []byte, err error) {
 	defer alog.Trace("sms").Stop(&err)
 
 	err = r.ParseForm()
@@ -112,12 +114,23 @@ func sms(w io.Writer, r *http.Request, db *gorm.DB, twilioc *twilio.RestClient, 
 		return
 	}
 
-	err = internal_tools.ValidateOrder(db, twilioc, order.OrderId, body, orderchan)
+	err = internal_tools.ValidateOrder(v, db, twilioc, order.OrderId, body, orderchan)
 	if err != nil {
 		return
 	}
 
-	err = internal_tools.CreateOrderMessage(db, twilioc)
+	err = internal_tools.CreateOrderMessage(v, db, twilioc)
+
+	return
+}
+
+func synchronizeDB(v *viper.Viper, w io.Writer, r *http.Request, forms_service *forms.Service, db *gorm.DB, twilioc *twilio.RestClient) (b []byte, err error) {
+	defer alog.Trace("synchronizeDB").Stop(&err)
+
+	err = internal_tools.SynchronizeDB(v, forms_service, db, twilioc)
+	if err != nil {
+		return
+	}
 
 	return
 }
