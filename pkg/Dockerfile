@@ -1,8 +1,8 @@
-FROM gcr.io/google-appengine/golang
+# First stage: build the executable.
+FROM golang:1.12.5-alpine AS builder
 
-WORKDIR /bin
-COPY /usr/local/bin/wkhtmltopdf /bin/wkhtmltopdf
+WORKDIR /usr/local/bin
 
-RUN go build -o /bin/api ./cmd/appengine
+COPY ./cmd /usr/local/bin
 
-ENTRYPOINT [ "/bin/api" ]
+ENTRYPOINT [ "./cmd run-server" ]
