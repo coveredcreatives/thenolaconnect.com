@@ -1,10 +1,11 @@
-package cloud_functions
+package cloudfunctions
 
 import (
 	"context"
 	"os"
 
 	"cloud.google.com/go/storage"
+
 	"github.com/GoogleCloudPlatform/functions-framework-go/functions"
 	alog "github.com/apex/log"
 	"github.com/coveredcreatives/thenolaconnect.com/pkg/devtools"
