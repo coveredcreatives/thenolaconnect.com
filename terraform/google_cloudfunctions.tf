@@ -10,14 +10,21 @@ resource "google_cloudfunctions_function" "qr_code_generate" {
   source_archive_object = google_storage_bucket_object.primary_server_zip.name
   service_account_email = local.service_account_email
   environment_variables = {
-    DB_USERNAME                = "postgres"
-    DB_PASSWORD                = var.database_password
-    DB_NAME                    = google_sql_database.company_database.name
-    DB_PORT                    = 5432
-    DB_HOSTNAME                = google_sql_database_instance.company_database_instance.public_ip_address
-    INSTANCE_CONNECTION_NAME   = google_sql_database_instance.company_database_instance.connection_name
-    UNIX_SOCKET_PATH           = format("/cloudsql/%s", google_sql_database_instance.company_database_instance.connection_name)
-    RETRIEVE_HTTPS_TRIGGER_URL = google_cloudfunctions_function.qr_code_retrieve.https_trigger_url
+    NOLA_ENV                                      = "production"
+    NOLA_DB_USERNAME                              = var.db_username
+    NOLA_DB_PASSWORD                              = var.db_password
+    NOLA_DB_NAME                                  = var.db_name
+    NOLA_DB_PORT                                  = var.db_port
+    NOLA_DB_HOSTNAME                              = format("/cloudsql/%s", google_sql_database_instance.company_database_instance.connection_name)
+    NOLA_HTTP_PORT                                = var.http_port
+    NOLA_DNS_PRINTER_IPV4_ADDRESS                 = var.dns_printer_ipv4_address
+    NOLA_GOOGLE_FORM_ID_ORDERS                    = var.google_form_id_orders
+    NOLA_GOOGLE_APPLICATION_SERVICE_ACCOUNT_EMAIL = var.google_application_service_account_email
+    NOLA_GOOGLE_STORAGE_BUCKET_NAME               = var.google_storage_bucket_name
+    NOLA_TWILIO_ACCOUNT_SID                       = var.twilio_account_sid
+    NOLA_TWILIO_CONVERSATION_SERVICE_SID          = var.twilio_conversation_service_sid
+    NOLA_TWILIO_ACCOUNT_AUTH_TOKEN                = var.twilio_account_auth_token
+    NOLA_RETRIEVE_HTTPS_TRIGGER_URL               = google_cloudfunctions_function.qr_code_retrieve.https_trigger_url
   }
 }
 
@@ -33,13 +40,20 @@ resource "google_cloudfunctions_function" "qr_code_retrieve" {
   source_archive_object = google_storage_bucket_object.primary_server_zip.name
   service_account_email = local.service_account_email
   environment_variables = {
-    DB_USERNAME              = "postgres"
-    DB_PASSWORD              = var.database_password
-    DB_NAME                  = google_sql_database.company_database.name
-    DB_PORT                  = 5432
-    DB_HOSTNAME              = google_sql_database_instance.company_database_instance.public_ip_address
-    INSTANCE_CONNECTION_NAME = google_sql_database_instance.company_database_instance.connection_name
-    UNIX_SOCKET_PATH         = format("/cloudsql/%s", google_sql_database_instance.company_database_instance.connection_name)
+    NOLA_ENV                                      = "production"
+    NOLA_DB_USERNAME                              = var.db_username
+    NOLA_DB_PASSWORD                              = var.db_password
+    NOLA_DB_NAME                                  = var.db_name
+    NOLA_DB_PORT                                  = var.db_port
+    NOLA_DB_HOSTNAME                              = format("/cloudsql/%s", google_sql_database_instance.company_database_instance.connection_name)
+    NOLA_HTTP_PORT                                = var.http_port
+    NOLA_DNS_PRINTER_IPV4_ADDRESS                 = var.dns_printer_ipv4_address
+    NOLA_GOOGLE_FORM_ID_ORDERS                    = var.google_form_id_orders
+    NOLA_GOOGLE_APPLICATION_SERVICE_ACCOUNT_EMAIL = var.google_application_service_account_email
+    NOLA_GOOGLE_STORAGE_BUCKET_NAME               = var.google_storage_bucket_name
+    NOLA_TWILIO_ACCOUNT_SID                       = var.twilio_account_sid
+    NOLA_TWILIO_CONVERSATION_SERVICE_SID          = var.twilio_conversation_service_sid
+    NOLA_TWILIO_ACCOUNT_AUTH_TOKEN                = var.twilio_account_auth_token
   }
 }
 

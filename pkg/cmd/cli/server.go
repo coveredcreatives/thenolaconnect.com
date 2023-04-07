@@ -6,9 +6,9 @@ import (
 
 	"cloud.google.com/go/storage"
 	alog "github.com/apex/log"
-	"github.com/coveredcreatives/thenolaconnect.com/pkg/devtools"
-	"github.com/coveredcreatives/thenolaconnect.com/pkg/handlers"
-	internal_tools "github.com/coveredcreatives/thenolaconnect.com/pkg/internal"
+	"github.com/coveredcreatives/thenolaconnect.com/devtools"
+	"github.com/coveredcreatives/thenolaconnect.com/handlers"
+	internal_tools "github.com/coveredcreatives/thenolaconnect.com/internal"
 	"github.com/spf13/viper"
 	"github.com/twilio/twilio-go"
 	cli "github.com/urfave/cli/v2"

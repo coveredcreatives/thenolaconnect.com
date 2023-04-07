@@ -13,8 +13,8 @@ import (
 	"gorm.io/gorm"
 
 	alog "github.com/apex/log"
-	"github.com/coveredcreatives/thenolaconnect.com/pkg/model"
-	template_tools "github.com/coveredcreatives/thenolaconnect.com/pkg/template"
+	"github.com/coveredcreatives/thenolaconnect.com/model"
+	template_tools "github.com/coveredcreatives/thenolaconnect.com/template"
 )
 
 type element struct {

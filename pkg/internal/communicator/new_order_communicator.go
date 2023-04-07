@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	alog "github.com/apex/log"
-	"github.com/coveredcreatives/thenolaconnect.com/pkg/model"
+	"github.com/coveredcreatives/thenolaconnect.com/model"
 	conversations_openapi "github.com/twilio/twilio-go/rest/conversations/v1"
 	"gorm.io/gorm"
 )

@@ -11,8 +11,8 @@ import (
 	"time"
 
 	alog "github.com/apex/log"
-	"github.com/coveredcreatives/thenolaconnect.com/pkg/devtools"
-	"github.com/coveredcreatives/thenolaconnect.com/pkg/model"
+	"github.com/coveredcreatives/thenolaconnect.com/devtools"
+	"github.com/coveredcreatives/thenolaconnect.com/model"
 	"github.com/docker/go-connections/nat"
 	"github.com/spf13/viper"
 	"github.com/testcontainers/testcontainers-go"

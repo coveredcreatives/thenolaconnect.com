@@ -2,9 +2,9 @@ package internal
 
 import (
 	alog "github.com/apex/log"
-	"github.com/coveredcreatives/thenolaconnect.com/pkg/devtools"
-	form_tools "github.com/coveredcreatives/thenolaconnect.com/pkg/internal/forms"
-	twilio_tools "github.com/coveredcreatives/thenolaconnect.com/pkg/internal/twilio"
+	"github.com/coveredcreatives/thenolaconnect.com/devtools"
+	form_tools "github.com/coveredcreatives/thenolaconnect.com/internal/forms"
+	twilio_tools "github.com/coveredcreatives/thenolaconnect.com/internal/twilio"
 	"github.com/spf13/viper"
 	"github.com/twilio/twilio-go"
 	"gorm.io/gorm"

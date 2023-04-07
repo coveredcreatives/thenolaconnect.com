@@ -3,7 +3,7 @@ package internal
 import (
 	"time"
 
-	communication_tools "github.com/coveredcreatives/thenolaconnect.com/pkg/internal/communicator"
+	communication_tools "github.com/coveredcreatives/thenolaconnect.com/internal/communicator"
 	"github.com/spf13/viper"
 	"github.com/twilio/twilio-go"
 	"gorm.io/gorm"

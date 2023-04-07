@@ -1,7 +1,6 @@
 package devtools
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/spf13/viper"
@@ -17,9 +16,6 @@ func Config() (v *viper.Viper, err error) {
 	v.BindEnv("DB_NAME")
 	v.BindEnv("DB_PORT")
 	v.BindEnv("DB_HOSTNAME")
-	v.BindEnv("DB_INSTANCE_CONNECTION_NAME")
-	v.BindEnv("DB_UNIX_SOCKET_PATH")
-	v.BindEnv("DB_PRIVATE_IP")
 	v.BindEnv("APP_CONFIG_PATH")
 	v.BindEnv("HTTP_PORT")
 	v.BindEnv("DNS_PRINTER_IPV4_ADDRESS")
@@ -41,15 +37,12 @@ func Config() (v *viper.Viper, err error) {
 		return
 	}
 	v.SetDefault("APP_CONFIG_FILENAME", v.GetString("ENV"))
-	v.SetDefault("APP_CONFIG_PATH", fmt.Sprint(dir, "/config"))
+	v.SetDefault("APP_CONFIG_PATH", dir)
 
 	// Loads configuration file from ./appconfig.{yaml|json}
 	v.SetConfigName(v.GetString("APP_CONFIG_FILENAME"))
 	v.AddConfigPath(v.GetString("APP_CONFIG_PATH"))
-	err = v.ReadInConfig()
-	if err != nil {
-		return
-	}
+	_ = v.ReadInConfig()
 	return
 }
 
@@ -69,7 +62,6 @@ type ApplicationConfig struct {
 }
 
 type GoogleApplicationConfig struct {
-	EnvGoogleAPIKeyOrders                   string `json:"GOOGLE_API_KEY_ORDERS" mapstructure:"GOOGLE_API_KEY_ORDERS"`
 	EnvGoogleFormIdOrders                   string `json:"GOOGLE_FORM_ID_ORDERS" mapstructure:"GOOGLE_FORM_ID_ORDERS"`
 	EnvGoogleApplicationServiceAccountEmail string `json:"GOOGLE_APPLICATION_SERVICE_ACCOUNT_EMAIL" mapstructure:"GOOGLE_APPLICATION_SERVICE_ACCOUNT_EMAIL"`
 	EnvGoogleApplicationCredentials         string `json:"GOOGLE_APPLICATION_CREDENTIALS" mapstructure:"GOOGLE_APPLICATION_CREDENTIALS"`

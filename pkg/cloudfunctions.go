@@ -8,8 +8,8 @@ import (
 
 	"github.com/GoogleCloudPlatform/functions-framework-go/functions"
 	alog "github.com/apex/log"
-	"github.com/coveredcreatives/thenolaconnect.com/pkg/devtools"
-	"github.com/coveredcreatives/thenolaconnect.com/pkg/handlers"
+	"github.com/coveredcreatives/thenolaconnect.com/devtools"
+	"github.com/coveredcreatives/thenolaconnect.com/handlers"
 )
 
 func init() {

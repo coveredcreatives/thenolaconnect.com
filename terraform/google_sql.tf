@@ -12,7 +12,17 @@ resource "google_sql_database_instance" "company_database_instance" {
       name  = "cloudsql.iam_authentication"
       value = "on"
     }
+
+    ip_configuration {
+      authorized_networks {
+        name  = google_compute_global_address.external_ip.name
+        value = google_compute_global_address.external_ip.address
+      }
+    }
+
+
   }
+
 }
 
 # qr mappings database

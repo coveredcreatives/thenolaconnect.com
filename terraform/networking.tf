@@ -1,4 +1,10 @@
-# Create External Static IP Address
+// Let's create a vpc for application resources to connect within
+resource "google_compute_network" "vpc" {
+  name                    = "app-vpc"
+  auto_create_subnetworks = false
+}
+
+// Let's create an external IP address for global connectivity
 resource "google_compute_global_address" "external_ip" {
   name         = "app-lb-ip"
   provider     = google
@@ -8,17 +14,23 @@ resource "google_compute_global_address" "external_ip" {
   description  = "External IPV4 address"
 }
 
-# Output network value
-output "external_ip" {
-  value       = google_compute_global_address.external_ip.address
-  description = "External static IP address for React app"
+// Then create a private ip address for connecting resources within vpc
+resource "google_compute_global_address" "private_ip_address" {
+  name          = "private-ip-address"
+  purpose       = "VPC_PEERING"
+  address_type  = "INTERNAL"
+  prefix_length = 16
+  network       = google_compute_network.vpc.id
 }
 
-resource "google_compute_network" "vpc" {
-  name                    = "app-vpc"
-  auto_create_subnetworks = false
+resource "google_compute_address" "private_ip_address" {
+  name         = "private-ip-address"
+  address_type = "INTERNAL"
+  subnetwork   = google_compute_subnetwork.subnet.self_link
+  address      = "10.8.0.2"
 }
 
+// Create a subnet for connecting resources within vpc
 resource "google_compute_subnetwork" "subnet" {
   name                     = "app-subnet"
   ip_cidr_range            = "10.8.0.0/28"
@@ -36,21 +48,14 @@ resource "google_compute_subnetwork" "subnet" {
     ip_cidr_range = "10.0.32.0/20"
   }
 }
-
-resource "google_compute_global_address" "private_ip_address" {
-  name          = "private-ip-address"
-  purpose       = "VPC_PEERING"
-  address_type  = "INTERNAL"
-  prefix_length = 16
-  network       = google_compute_network.vpc.id
-}
-
+// TODO
 resource "google_service_networking_connection" "private_vpc_connection" {
   network                 = google_compute_network.vpc.id
   service                 = "servicenetworking.googleapis.com"
   reserved_peering_ranges = [google_compute_global_address.private_ip_address.name]
 }
 
+//  TODO
 resource "google_compute_project_default_network_tier" "default" {
   project      = data.google_project.new_orleans_connection.project_id
   network_tier = "PREMIUM"
@@ -65,46 +70,6 @@ resource "google_compute_backend_bucket" "static_site" {
   enable_cdn  = true
 }
 
-# Create HTTPS certificate
-resource "google_compute_managed_ssl_certificate" "web" {
-  provider = google-beta
-  name     = "ssl-certificate"
-  project  = data.google_project.new_orleans_connection.project_id
-  managed {
-    domains = [var.domain, format("www.%s", var.domain)]
-  }
-}
-
-# GCP URL MAP HTTPS
-resource "google_compute_url_map" "web_https" {
-  provider        = google
-  name            = "web-url-map-https"
-  default_service = google_compute_backend_bucket.static_site.id
-
-  host_rule {
-    hosts        = ["thenolaconnect.com"]
-    path_matcher = "qrmapping"
-  }
-
-  path_matcher {
-    name            = "qrmapping"
-    default_service = google_compute_backend_bucket.static_site.id
-
-    path_rule {
-      paths   = ["/"]
-      service = google_compute_backend_bucket.static_site.id
-    }
-  }
-}
-
-# GCP target proxy HTTPS
-resource "google_compute_target_https_proxy" "web_https" {
-  provider         = google
-  name             = "web-target-proxy-https"
-  url_map          = google_compute_url_map.web_https.self_link
-  ssl_certificates = [google_compute_managed_ssl_certificate.web.self_link]
-}
-
 # GCP forwarding rule HTTPS
 resource "google_compute_global_forwarding_rule" "web_https" {
   provider              = google
@@ -113,30 +78,58 @@ resource "google_compute_global_forwarding_rule" "web_https" {
   ip_address            = google_compute_global_address.external_ip.address
   ip_protocol           = "TCP"
   port_range            = "443"
-  target                = google_compute_target_https_proxy.web_https.self_link
+  target                = google_compute_target_https_proxy.default.id
 }
 
-resource "google_compute_url_map" "web_http" {
-  name        = "web-url-map-http"
-  description = "Web HTTP load balancer"
 
-  default_url_redirect {
-    https_redirect = true
-    strip_query    = true
-  }
-}
-
-resource "google_compute_global_forwarding_rule" "web_http" {
-  name                  = "web-forwarding-rule-http"
+resource "google_compute_global_forwarding_rule" "web_http_80" {
+  provider              = google
+  name                  = "web-forwarding-rule-http-80"
   load_balancing_scheme = "EXTERNAL"
   ip_address            = google_compute_global_address.external_ip.address
   ip_protocol           = "TCP"
-  target                = google_compute_target_http_proxy.web_http.id
+  target                = google_compute_target_http_proxy.default.id
   port_range            = "80"
 }
 
-resource "google_compute_target_http_proxy" "web_http" {
-  name        = "web-target-proxy-http"
+resource "google_compute_global_forwarding_rule" "web_http_8080" {
+  provider              = google
+  name                  = "web-forwarding-rule-http-8080"
+  load_balancing_scheme = "EXTERNAL"
+  ip_address            = google_compute_global_address.external_ip.address
+  ip_protocol           = "TCP"
+  target                = google_compute_target_http_proxy.default.id
+  port_range            = "8080"
+}
+
+
+resource "google_compute_target_http_proxy" "default" {
+  name        = "api-target-proxy-http"
   description = "HTTP target proxy"
-  url_map     = google_compute_url_map.web_http.id
+  url_map     = google_compute_url_map.default.id
+}
+
+resource "google_compute_target_https_proxy" "web_https" {
+  name    = "web-target-proxy-https"
+  url_map = google_compute_url_map.default.id
+  ssl_certificates = [
+    google_compute_managed_ssl_certificate.web.self_link,
+  ]
+}
+
+resource "google_compute_target_https_proxy" "default" {
+  name    = "default-target-proxy-https"
+  url_map = google_compute_url_map.default.id
+  ssl_certificates = [
+    google_compute_managed_ssl_certificate.web.id,
+    google_compute_managed_ssl_certificate.wild_card.id
+  ]
+}
+
+resource "google_compute_health_check" "default" {
+  provider = google-beta
+  name     = "health-check"
+  http_health_check {
+    port = 80
+  }
 }

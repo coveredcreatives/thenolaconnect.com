@@ -2,7 +2,7 @@ package twilio
 
 import (
 	alog "github.com/apex/log"
-	"github.com/coveredcreatives/thenolaconnect.com/pkg/model"
+	"github.com/coveredcreatives/thenolaconnect.com/model"
 	"github.com/twilio/twilio-go"
 	accounts_openapi "github.com/twilio/twilio-go/rest/api/v2010"
 	"gorm.io/gorm"

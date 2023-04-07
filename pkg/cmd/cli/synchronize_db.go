@@ -2,8 +2,8 @@ package main
 
 import (
 	alog "github.com/apex/log"
-	"github.com/coveredcreatives/thenolaconnect.com/pkg/devtools"
-	internal_tools "github.com/coveredcreatives/thenolaconnect.com/pkg/internal"
+	"github.com/coveredcreatives/thenolaconnect.com/devtools"
+	internal_tools "github.com/coveredcreatives/thenolaconnect.com/internal"
 	"github.com/spf13/viper"
 
 	"github.com/twilio/twilio-go"

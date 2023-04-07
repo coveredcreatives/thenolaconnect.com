@@ -7,9 +7,9 @@ import (
 	"github.com/spf13/viper"
 	"github.com/twilio/twilio-go"
 
-	"github.com/coveredcreatives/thenolaconnect.com/pkg/devtools"
-	communication_tools "github.com/coveredcreatives/thenolaconnect.com/pkg/internal/communicator"
-	"github.com/coveredcreatives/thenolaconnect.com/pkg/model"
+	"github.com/coveredcreatives/thenolaconnect.com/devtools"
+	communication_tools "github.com/coveredcreatives/thenolaconnect.com/internal/communicator"
+	"github.com/coveredcreatives/thenolaconnect.com/model"
 	"gorm.io/gorm"
 )
 

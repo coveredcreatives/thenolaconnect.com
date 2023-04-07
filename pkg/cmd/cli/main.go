@@ -6,7 +6,7 @@ import (
 	"syscall"
 
 	"github.com/apex/log"
-	"github.com/coveredcreatives/thenolaconnect.com/pkg/devtools"
+	"github.com/coveredcreatives/thenolaconnect.com/devtools"
 
 	cli "github.com/urfave/cli/v2"
 )

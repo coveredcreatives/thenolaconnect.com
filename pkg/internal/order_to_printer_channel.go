@@ -5,8 +5,8 @@ import (
 	"os/exec"
 
 	alog "github.com/apex/log"
-	"github.com/coveredcreatives/thenolaconnect.com/pkg/devtools"
-	"github.com/coveredcreatives/thenolaconnect.com/pkg/model"
+	"github.com/coveredcreatives/thenolaconnect.com/devtools"
+	"github.com/coveredcreatives/thenolaconnect.com/model"
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
 )

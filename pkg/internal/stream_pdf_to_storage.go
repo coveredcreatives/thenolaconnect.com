@@ -6,11 +6,11 @@ import (
 
 	"cloud.google.com/go/storage"
 	alog "github.com/apex/log"
-	"github.com/coveredcreatives/thenolaconnect.com/pkg/devtools"
-	pgw_tools "github.com/coveredcreatives/thenolaconnect.com/pkg/internal/pgw"
-	storage_tools "github.com/coveredcreatives/thenolaconnect.com/pkg/internal/storage"
-	twilio_tools "github.com/coveredcreatives/thenolaconnect.com/pkg/internal/twilio"
-	"github.com/coveredcreatives/thenolaconnect.com/pkg/model"
+	"github.com/coveredcreatives/thenolaconnect.com/devtools"
+	pgw_tools "github.com/coveredcreatives/thenolaconnect.com/internal/pgw"
+	storage_tools "github.com/coveredcreatives/thenolaconnect.com/internal/storage"
+	twilio_tools "github.com/coveredcreatives/thenolaconnect.com/internal/twilio"
+	"github.com/coveredcreatives/thenolaconnect.com/model"
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
 )

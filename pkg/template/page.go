@@ -1,7 +1,7 @@
 package template
 
 import (
-	"github.com/coveredcreatives/thenolaconnect.com/pkg/model"
+	"github.com/coveredcreatives/thenolaconnect.com/model"
 )
 
 type Page struct {

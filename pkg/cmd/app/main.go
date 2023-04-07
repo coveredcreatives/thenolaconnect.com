@@ -10,9 +10,9 @@ import (
 	"google.golang.org/api/forms/v1"
 
 	alog "github.com/apex/log"
-	"github.com/coveredcreatives/thenolaconnect.com/pkg/devtools"
-	"github.com/coveredcreatives/thenolaconnect.com/pkg/handlers"
-	internal_tools "github.com/coveredcreatives/thenolaconnect.com/pkg/internal"
+	"github.com/coveredcreatives/thenolaconnect.com/devtools"
+	"github.com/coveredcreatives/thenolaconnect.com/handlers"
+	internal_tools "github.com/coveredcreatives/thenolaconnect.com/internal"
 	twilio "github.com/twilio/twilio-go"
 )
 

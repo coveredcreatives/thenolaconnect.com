@@ -9,8 +9,8 @@ import (
 
 	"cloud.google.com/go/storage"
 	alog "github.com/apex/log"
-	internal_tools "github.com/coveredcreatives/thenolaconnect.com/pkg/internal"
-	"github.com/coveredcreatives/thenolaconnect.com/pkg/model"
+	internal_tools "github.com/coveredcreatives/thenolaconnect.com/internal"
+	"github.com/coveredcreatives/thenolaconnect.com/model"
 	"github.com/spf13/viper"
 	"github.com/twilio/twilio-go"
 	"google.golang.org/api/forms/v1"
