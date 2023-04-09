@@ -6,6 +6,13 @@ resource "google_cloudbuild_trigger" "build_website" {
     ref       = "refs/heads/dev"
     repo_type = "GITHUB"
   }
+  github {
+    owner = var.github_username
+    name  = "thenolaconnect.com"
+    push {
+      branch = "dev"
+    }
+  }
 
   build {
     source {
@@ -48,6 +55,13 @@ resource "google_cloudbuild_trigger" "build_executable" {
     uri       = data.google_sourcerepo_repository.thenolaconnect.url
     ref       = "refs/heads/dev"
     repo_type = "GITHUB"
+  }
+  github {
+    owner = var.github_username
+    name  = "thenolaconnect.com"
+    push {
+      branch = "dev"
+    }
   }
 
   build {

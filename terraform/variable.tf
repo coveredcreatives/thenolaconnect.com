@@ -71,3 +71,7 @@ variable "twilio_conversation_service_sid" {
 variable "twilio_account_auth_token" {
   description = "assign auth token that enabled the application to preform actions on the twilio account"
 }
+
+variable "github_username" {
+  description = "assign organization name that owns repo thenolaconnect.com"
+}
