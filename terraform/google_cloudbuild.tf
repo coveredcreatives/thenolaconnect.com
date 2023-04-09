@@ -1,9 +1,9 @@
 resource "google_cloudbuild_trigger" "build_website" {
   location = "us-central1"
   source_to_build {
-    uri       = google_sourcerepo_repository.qr_code.url
-    ref       = "refs/heads/main"
-    repo_type = "CLOUD_SOURCE_REPOSITORIES"
+    uri       = data.google_sourcerepo_repository.thenolaconnect.url
+    ref       = "refs/heads/dev"
+    repo_type = "GITHUB"
   }
 
   build {
@@ -43,9 +43,9 @@ resource "google_cloudbuild_trigger" "build_website" {
 resource "google_cloudbuild_trigger" "build_executable" {
   location = "us-central1"
   source_to_build {
-    uri       = google_sourcerepo_repository.qr_code.url
-    ref       = "refs/heads/main"
-    repo_type = "CLOUD_SOURCE_REPOSITORIES"
+    uri       = data.google_sourcerepo_repository.thenolaconnect.url
+    ref       = "refs/heads/dev"
+    repo_type = "GITHUB"
   }
 
   build {
@@ -63,30 +63,28 @@ resource "google_cloudbuild_trigger" "build_executable" {
     step {
       name       = "golang:1.20"
       entrypoint = "go"
-      args       = ["build", "./cmd/cli"]
+      args       = ["build", "-o", "cli-linux-amd64", "./cmd/cli"]
       timeout    = "120s"
-    }
-    step {
-      name       = "ubuntu"
-      entrypoint = "/bin/sh"
-      args       = ["build", "./cmd/cli"]
-      timeout    = "120s"
-    }
-    step {
-      name = "gcr.io/cloud-builders/gsutil"
-      args = ["cp", "cli", "cli@$SHORT_SHA"]
+      env = [
+        "GOOS=linux",
+        "GOARCH=amd64"
+      ]
     }
     step {
       name = "gcr.io/cloud-builders/gsutil"
-      args = ["cp", "cli", "cli@latest"]
+      args = ["cp", "cli-linux-amd64", "cli-linux-amd64@$SHORT_SHA"]
     }
     step {
       name = "gcr.io/cloud-builders/gsutil"
-      args = ["cp", "cli@latest", "gs://${google_storage_bucket.executables.name}"]
+      args = ["cp", "cli-linux-amd64", "cli-linux-amd64@latest"]
     }
     step {
       name = "gcr.io/cloud-builders/gsutil"
-      args = ["cp", "cli@$SHORT_SHA", "gs://${google_storage_bucket.executables.name}"]
+      args = ["cp", "cli-linux-amd64@latest", "gs://${google_storage_bucket.executables.name}"]
+    }
+    step {
+      name = "gcr.io/cloud-builders/gsutil"
+      args = ["cp", "cli-linux-amd64@$SHORT_SHA", "gs://${google_storage_bucket.executables.name}"]
     }
   }
 }

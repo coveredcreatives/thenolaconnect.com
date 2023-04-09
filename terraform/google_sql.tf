@@ -4,7 +4,7 @@ resource "google_sql_database_instance" "company_database_instance" {
   name                = "qr-code-instance"
   region              = var.region
   database_version    = "POSTGRES_14"
-  root_password       = var.database_password
+  root_password       = var.db_password
   deletion_protection = false
   settings {
     tier = "db-f1-micro"
@@ -36,7 +36,7 @@ resource "google_sql_user" "default" {
   project  = data.google_project.new_orleans_connection.project_id
   instance = google_sql_database_instance.company_database_instance.name
   name     = "postgres"
-  password = var.database_password
+  password = var.db_password
   type     = "BUILT_IN"
 }
 

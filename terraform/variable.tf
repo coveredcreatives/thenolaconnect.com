@@ -10,11 +10,6 @@ variable "region" {
   description = "The region in Google Cloud where the resources will be deployed."
 }
 
-variable "database_password" {
-  description = "Password to connect to database instance"
-  sensitive   = true
-}
-
 variable "domain" {
   description = "top level main domain of project"
 }
@@ -47,6 +42,10 @@ variable "http_port" {
 
 variable "dns_printer_ipv4_address" {
   description = "assign an ip address to deliver outgoing printer messages to"
+}
+
+variable "google_api_key" {
+  description = "api key to allow access to google forms api"
 }
 
 variable "google_form_id_orders" {
