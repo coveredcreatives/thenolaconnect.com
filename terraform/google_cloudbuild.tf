@@ -1,5 +1,6 @@
 resource "google_cloudbuild_trigger" "build_website" {
   location = "us-central1"
+  name     = "build-website"
   source_to_build {
     uri       = data.google_sourcerepo_repository.thenolaconnect.url
     ref       = "refs/heads/dev"
@@ -42,6 +43,7 @@ resource "google_cloudbuild_trigger" "build_website" {
 
 resource "google_cloudbuild_trigger" "build_executable" {
   location = "us-central1"
+  name     = "build-executable"
   source_to_build {
     uri       = data.google_sourcerepo_repository.thenolaconnect.url
     ref       = "refs/heads/dev"
