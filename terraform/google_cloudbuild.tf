@@ -16,16 +16,12 @@ resource "google_cloudbuild_trigger" "build_website" {
 
   build {
     source {
-      storage_source {
-        bucket = google_storage_bucket.web.name
-        object = google_storage_bucket_object.web_application_zip.name
+      repo_source {
+        project_id  = var.project_id
+        repo_name   = data.google_sourcerepo_repository.thenolaconnect.name
+        dir         = "./web"
+        branch_name = "dev"
       }
-    }
-
-    step {
-      name    = "gcr.io/cloud-builders/gsutil"
-      args    = ["cp", google_storage_bucket_object.web_application_zip.self_link, google_storage_bucket_object.web_application_zip.name]
-      timeout = "120s"
     }
     step {
       name       = "node:16.13.0"
@@ -66,15 +62,12 @@ resource "google_cloudbuild_trigger" "build_executable" {
 
   build {
     source {
-      storage_source {
-        bucket = google_storage_bucket.functions.name
-        object = google_storage_bucket_object.primary_server_zip.name
+      repo_source {
+        project_id  = var.project_id
+        repo_name   = data.google_sourcerepo_repository.thenolaconnect.name
+        dir         = "./pkg"
+        branch_name = "dev"
       }
-    }
-    step {
-      name    = "gcr.io/cloud-builders/gsutil"
-      args    = ["cp", google_storage_bucket_object.primary_server_zip.self_link, google_storage_bucket_object.primary_server_zip.name]
-      timeout = "120s"
     }
     step {
       name       = "golang:1.20"

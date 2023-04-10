@@ -1,6 +1,6 @@
 data "archive_file" "primary_server_source" {
   type        = "zip"
-  source_dir  = local.primary_server_dir
+  source_dir  = abspath("../pkg")
   output_path = "/tmp/primary_server.zip"
 }
 
