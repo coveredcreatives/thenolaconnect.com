@@ -15,3 +15,9 @@ resource "google_project_iam_member" "admin_cloud_build_builds_editor" {
   role    = "roles/cloudbuild.builds.editor"
   member  = format("user:%s", var.admin_email)
 }
+
+resource "google_project_iam_member" "service_account_iap_tunnel_resource_accessor" {
+  project = var.project_id
+  role    = "roles/iap.tunnelResourceAccessor"
+  member  = format("serviceAccount:%s", local.service_account_email)
+}

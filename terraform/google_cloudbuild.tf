@@ -1,11 +1,7 @@
 resource "google_cloudbuild_trigger" "build_website" {
   location = "us-central1"
   name     = "build-website"
-  source_to_build {
-    uri       = data.google_sourcerepo_repository.thenolaconnect.url
-    ref       = "refs/heads/dev"
-    repo_type = "GITHUB"
-  }
+
   github {
     owner = var.github_username
     name  = "thenolaconnect.com"
@@ -22,6 +18,10 @@ resource "google_cloudbuild_trigger" "build_website" {
         dir         = "./web"
         branch_name = "dev"
       }
+    }
+    step {
+      name   = "node:16.13.0"
+      script = "cd web && npm install"
     }
     step {
       name       = "node:16.13.0"
@@ -47,11 +47,7 @@ resource "google_cloudbuild_trigger" "build_website" {
 resource "google_cloudbuild_trigger" "build_executable" {
   location = "us-central1"
   name     = "build-executable"
-  source_to_build {
-    uri       = data.google_sourcerepo_repository.thenolaconnect.url
-    ref       = "refs/heads/dev"
-    repo_type = "GITHUB"
-  }
+
   github {
     owner = var.github_username
     name  = "thenolaconnect.com"
@@ -70,9 +66,13 @@ resource "google_cloudbuild_trigger" "build_executable" {
       }
     }
     step {
+      name   = "golang:1.20"
+      script = "cd pkg"
+    }
+    step {
       name       = "golang:1.20"
       entrypoint = "go"
-      args       = ["build", "-o", "cli-linux-amd64", "./cmd/cli"]
+      args       = ["build", "-o", "cli-linux-amd64", "./cmd/app"]
       timeout    = "120s"
       env = [
         "GOOS=linux",

@@ -1,3 +1,20 @@
+# resource "google_compute_firewall" "outbound-http" {
+#   name        = "${google_compute_network.vpc.name}-firewall-outbound-http"
+#   network     = google_compute_network.vpc.self_link
+#   description = "Allow outbound web applications traffic"
+
+#   direction = "EGRESS"
+#   allow {
+#     protocol = "tcp"
+#     ports = [
+#       "80", # HTTP
+#       "8080"
+#     ]
+#   }
+
+#   target_tags = ["web"]
+# }
+
 resource "google_compute_firewall" "http" {
   name        = "${google_compute_network.vpc.name}-firewall-http"
   network     = google_compute_network.vpc.self_link
@@ -50,16 +67,16 @@ resource "google_compute_firewall" "ssh" {
   target_tags   = ["web"]
 }
 
-resource "google_compute_firewall" "postgresql" {
-  name    = "${google_compute_network.vpc.name}-firewall-postgresql"
-  network = google_compute_network.vpc.name
+# resource "google_compute_firewall" "postgresql" {
+#   name    = "${google_compute_network.vpc.name}-firewall-postgresql"
+#   network = google_compute_network.vpc.name
 
-  direction = "EGRESS"
-  allow {
-    protocol = "tcp"
-    ports    = ["5432"]
-  }
+#   direction = "EGRESS"
+#   allow {
+#     protocol = "tcp"
+#     ports    = ["5432"]
+#   }
 
-  source_ranges = ["0.0.0.0/0"]
-  target_tags   = ["web"]
-}
+#   source_ranges = ["0.0.0.0/0"]
+#   target_tags   = ["web"]
+# }
