@@ -20,8 +20,9 @@ resource "google_cloudbuild_trigger" "build_website" {
       }
     }
     step {
-      name   = "node:16.13.0"
-      script = "cd web && npm install"
+      name       = "node:16.13.0"
+      entrypoint = "cd"
+      args       = ["web"]
     }
     step {
       name       = "node:16.13.0"
@@ -66,8 +67,9 @@ resource "google_cloudbuild_trigger" "build_executable" {
       }
     }
     step {
-      name   = "golang:1.20"
-      script = "cd pkg"
+      name       = "golang:1.20"
+      entrypoint = "cd"
+      args       = ["pkg"]
     }
     step {
       name       = "golang:1.20"
