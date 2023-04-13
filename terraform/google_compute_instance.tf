@@ -29,27 +29,27 @@ sudo apt-get install wget
 wget https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-2/wkhtmltox_0.12.6.1-2.bullseye_amd64.deb
 sudo apt-get -y install ./wkhtmltox_0.12.6.1-2.bullseye_amd64.deb
 # Install app executable
-gsutil cp gs://${google_storage_bucket.executables.name}/cli-linux-amd64@latest /bin/thenolaconnect
-chmod +x /bin/thenolaconnect
+sudo gsutil cp gs://${google_storage_bucket.executables.name}/cli-linux-amd64@latest /bin/thenolaconnect
+sudo chmod +x /bin/thenolaconnect
 # Create config file
-echo "NOLA_ENV: production
-NOLA_DB_USERNAME: ${var.db_username}
-NOLA_DB_PASSWORD: ${var.db_password}
-NOLA_DB_NAME: ${var.db_name}
-NOLA_DB_PORT: ${var.db_port}
-NOLA_DB_HOSTNAME: ${google_sql_database_instance.company_database_instance.first_ip_address}
-NOLA_HTTP_PORT: ${var.http_port}
-NOLA_DNS_PRINTER_IPV4_ADDRESS: ${var.dns_printer_ipv4_address}
-NOLA_DNS_RETRIEVE_TRIGGER_URL: ${google_cloudfunctions_function.qr_code_retrieve.https_trigger_url}
-NOLA_GOOGLE_APPLICATION_SERVICE_ACCOUNT_EMAIL: ${var.google_application_service_account_email}
-NOLA_REACT_APP_GOOGLE_API_KEY: ${var.google_api_key}
-NOLA_GOOGLE_STORAGE_BUCKET_NAME: ${data.google_storage_bucket.company_assets.name}
-NOLA_GOOGLE_API_KEY_ORDERS: ${var.google_api_key}
-NOLA_GOOGLE_FORM_ID_ORDERS: ${var.google_form_id_orders}
-NOLA_TWILIO_ACCOUNT_SID: ${var.twilio_account_sid}
-NOLA_TWILIO_ACCOUNT_AUTH_TOKEN: ${var.twilio_account_auth_token}
-NOLA_TWILIO_CONVERSATION_SERVICE_SID: ${var.twilio_conversation_service_sid}
-NOLA_APP_CONFIG_PATH: /home/devscrum" > /home/devscrum/production.yaml
+echo "ENV: production
+DB_USERNAME: ${var.db_username}
+DB_PASSWORD: ${var.db_password}
+DB_NAME: ${var.db_name}
+DB_PORT: ${var.db_port}
+DB_HOSTNAME: ${google_sql_database_instance.company_database_instance.first_ip_address}
+HTTP_PORT: ${var.http_port}
+DNS_PRINTER_IPV4_ADDRESS: ${var.dns_printer_ipv4_address}
+DNS_RETRIEVE_TRIGGER_URL: ${google_cloudfunctions_function.qr_code_retrieve.https_trigger_url}
+GOOGLE_APPLICATION_SERVICE_ACCOUNT_EMAIL: ${var.google_application_service_account_email}
+REACT_APP_GOOGLE_API_KEY: ${var.google_api_key}
+GOOGLE_STORAGE_BUCKET_NAME: ${data.google_storage_bucket.company_assets.name}
+GOOGLE_API_KEY_ORDERS: ${var.google_api_key}
+GOOGLE_FORM_ID_ORDERS: ${var.google_form_id_orders}
+TWILIO_ACCOUNT_SID: ${var.twilio_account_sid}
+TWILIO_ACCOUNT_AUTH_TOKEN: ${var.twilio_account_auth_token}
+TWILIO_CONVERSATION_SERVICE_SID: ${var.twilio_conversation_service_sid}
+APP_CONFIG_PATH: /home/devscrum" > /home/devscrum/production.yaml
 # Create sysctl service
 echo "
 [Unit]

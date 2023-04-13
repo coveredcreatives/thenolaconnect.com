@@ -1,13 +1,3 @@
-resource "google_compute_managed_ssl_certificate" "web" {
-  provider = google-beta
-  name     = "ssl-certificate"
-  type     = "MANAGED"
-  project  = data.google_project.new_orleans_connection.project_id
-  managed {
-    domains = [var.domain, format("www.%s", var.domain)]
-  }
-}
-
 resource "google_compute_managed_ssl_certificate" "wild_card" {
   provider = google-beta
   name     = "alb-wildcard-ssl-cert-1"
@@ -19,6 +9,20 @@ resource "google_compute_managed_ssl_certificate" "wild_card" {
       "api.thenolaconnect.com",
       "spec.thenolaconnect.com",
       "theneworleansseafoodconnection.com",
+      "www.theneworleansseafoodconnection.com",
+    ]
+  }
+}
+
+resource "google_compute_managed_ssl_certificate" "wild_card_2" {
+  provider = google-beta
+  name     = "alb-wildcard-ssl-cert-2"
+  type     = "MANAGED"
+  project  = data.google_project.new_orleans_connection.project_id
+  managed {
+    domains = [
+      "api.thenolaconnect.com",
+      "thenolaconnect.com",
       "www.theneworleansseafoodconnection.com",
     ]
   }

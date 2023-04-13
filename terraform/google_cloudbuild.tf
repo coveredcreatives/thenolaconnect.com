@@ -21,25 +21,24 @@ resource "google_cloudbuild_trigger" "build_website" {
     }
     step {
       name       = "node:16.13.0"
-      entrypoint = "cd"
-      args       = ["web"]
-    }
-    step {
-      name       = "node:16.13.0"
+      dir        = "web"
       entrypoint = "npm"
       args       = ["install"]
     }
     step {
       name       = "node:16.13.0"
+      dir        = "web"
       entrypoint = "npm"
       args       = ["run", "build"]
     }
     step {
       name = "gcr.io/cloud-builders/gsutil"
+      dir  = "web"
       args = ["-m", "cp", "-r", "build/*", "gs://www.thenolaconnect.com"]
     }
     step {
       name = "gcr.io/cloud-builders/gsutil"
+      dir  = "web"
       args = ["-m", "cp", "-r", "build/*", "gs://www.theneworleansseafoodconnection.com"]
     }
   }
@@ -68,11 +67,7 @@ resource "google_cloudbuild_trigger" "build_executable" {
     }
     step {
       name       = "golang:1.20"
-      entrypoint = "cd"
-      args       = ["pkg"]
-    }
-    step {
-      name       = "golang:1.20"
+      dir        = "pkg"
       entrypoint = "go"
       args       = ["build", "-o", "cli-linux-amd64", "./cmd/app"]
       timeout    = "120s"
@@ -83,18 +78,22 @@ resource "google_cloudbuild_trigger" "build_executable" {
     }
     step {
       name = "gcr.io/cloud-builders/gsutil"
+      dir  = "pkg"
       args = ["cp", "cli-linux-amd64", "cli-linux-amd64@$SHORT_SHA"]
     }
     step {
       name = "gcr.io/cloud-builders/gsutil"
+      dir  = "pkg"
       args = ["cp", "cli-linux-amd64", "cli-linux-amd64@latest"]
     }
     step {
       name = "gcr.io/cloud-builders/gsutil"
+      dir  = "pkg"
       args = ["cp", "cli-linux-amd64@latest", "gs://${google_storage_bucket.executables.name}"]
     }
     step {
       name = "gcr.io/cloud-builders/gsutil"
+      dir  = "pkg"
       args = ["cp", "cli-linux-amd64@$SHORT_SHA", "gs://${google_storage_bucket.executables.name}"]
     }
   }

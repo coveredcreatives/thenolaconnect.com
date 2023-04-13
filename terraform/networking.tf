@@ -126,6 +126,14 @@ resource "google_compute_target_https_proxy" "default" {
   ]
 }
 
+resource "google_compute_target_https_proxy" "default_02" {
+  name    = "default-target-proxy-https-02"
+  url_map = google_compute_url_map.default.id
+  ssl_certificates = [
+    google_compute_managed_ssl_certificate.wild_card_2.id
+  ]
+}
+
 resource "google_compute_health_check" "default" {
   provider = google-beta
   name     = "health-check"

@@ -5,8 +5,6 @@ resource "google_compute_url_map" "default" {
 
   host_rule {
     hosts = [
-      "app.thenolaconnect.com",
-      "theneworleansseafoodconnection.com",
       "www.theneworleansseafoodconnection.com"
     ]
     path_matcher = "web"
@@ -24,26 +22,10 @@ resource "google_compute_url_map" "default" {
 
   host_rule {
     hosts = [
-      "spec.thenolaconnect.com",
-    ]
-    path_matcher = "openapi"
-  }
-
-  host_rule {
-    hosts = [
+      "thenolaconnect.com",
       "api.thenolaconnect.com"
     ]
     path_matcher = "api"
-  }
-
-  path_matcher {
-    name            = "openapi"
-    default_service = google_compute_backend_service.default.self_link
-
-    path_rule {
-      paths   = ["/"]
-      service = google_compute_backend_service.default.self_link
-    }
   }
 
   path_matcher {
