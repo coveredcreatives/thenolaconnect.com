@@ -37,7 +37,7 @@ DB_USERNAME: ${var.db_username}
 DB_PASSWORD: ${var.db_password}
 DB_NAME: ${var.db_name}
 DB_PORT: ${var.db_port}
-DB_HOSTNAME: ${google_sql_database_instance.company_database_instance.first_ip_address}
+DB_HOSTNAME: ${google_sql_database_instance.company_database_instance.private_ip_address}
 HTTP_PORT: ${var.http_port}
 DNS_PRINTER_IPV4_ADDRESS: ${var.dns_printer_ipv4_address}
 DNS_RETRIEVE_TRIGGER_URL: ${google_cloudfunctions_function.qr_code_retrieve.https_trigger_url}
@@ -65,7 +65,7 @@ ExecStart=/bin/thenolaconnect
 Restart=on-failure
 RestartSec=10
 SyslogIdentifier=thenolaconnect
-Environment=NOLA_APP_CONFIG_PATH=/homes/devscrum
+Environment=NOLA_APP_CONFIG_PATH=/home/devscrum
 Environment=NOLA_ENV=production
 [Install]
 WantedBy=multi-user.target
@@ -97,11 +97,6 @@ resource "google_compute_instance_group" "application" {
 
   named_port {
     name = "http"
-    port = "8080"
-  }
-
-  named_port {
-    name = "https"
-    port = "8443"
+    port = var.http_port
   }
 }

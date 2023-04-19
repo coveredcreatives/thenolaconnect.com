@@ -14,9 +14,11 @@ resource "google_sql_database_instance" "company_database_instance" {
     }
 
     ip_configuration {
+      private_network                               = google_compute_network.vpc.id
+      enable_private_path_for_google_cloud_services = true
       authorized_networks {
-        name  = google_compute_global_address.external_ip.name
-        value = google_compute_global_address.external_ip.address
+        name  = "onprem-devscrum"
+        value = "98.163.211.86"
       }
     }
 

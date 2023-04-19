@@ -7,7 +7,7 @@ export const getApiURL = () => {
         return 'http://127.0.0.1:3001';
     }
 
-    return 'http://127.0.0.1:3001';
+    return 'https://api.thenolaconnect.com';
 };
 
 
@@ -16,16 +16,16 @@ export const httpClient = axios.create({
 });
 
 const api = {
-    order_communication_generate: () => httpClient.get(`/order_communication/generate`),
-    order_communication_list: () => httpClient.get(`/order_communication/list`),
-    order_communication_deliver_to_kitchen: (order_id) => httpClient.get(`/order_communication/deliver_to_kitchen?order_id=${order_id}`),
-    qr_mapping_generate: (form) => httpClient.post(`/qr_mapping/generate`, form, {
+    order_communication_generate: () => httpClient.get(`/v1/order_communication/generate`),
+    order_communication_list: () => httpClient.get(`/v1/order_communication/list`),
+    order_communication_deliver_to_kitchen: (order_id) => httpClient.get(`/v1/order_communication/deliver_to_kitchen?order_id=${order_id}`),
+    qr_mapping_generate: (form) => httpClient.post(`/v1/qr_mapping/generate`, form, {
         headers: {
             'content-type': 'multipart/form-data',
         }
     }),
-    qr_mapping_list: () => httpClient.get(`/qr_mapping/list`),
-    qr_mapping_retrieve: (id) => httpClient.get(`/qr_mapping/retrieve?id=${id}`)
+    qr_mapping_list: () => httpClient.get(`/v1/qr_mapping/list`),
+    qr_mapping_retrieve: (id) => httpClient.get(`/v1/qr_mapping/retrieve?id=${id}`)
 };
 
 export default api;

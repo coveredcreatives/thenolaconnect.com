@@ -78,18 +78,7 @@ resource "google_compute_global_forwarding_rule" "web_https" {
   ip_address            = google_compute_global_address.external_ip.address
   ip_protocol           = "TCP"
   port_range            = "443"
-  target                = google_compute_target_https_proxy.default.id
-}
-
-
-resource "google_compute_global_forwarding_rule" "web_http_80" {
-  provider              = google
-  name                  = "web-forwarding-rule-http-80"
-  load_balancing_scheme = "EXTERNAL"
-  ip_address            = google_compute_global_address.external_ip.address
-  ip_protocol           = "TCP"
-  target                = google_compute_target_http_proxy.default.id
-  port_range            = "80"
+  target                = google_compute_target_https_proxy.default_02.id
 }
 
 resource "google_compute_global_forwarding_rule" "web_http_8080" {
@@ -106,39 +95,25 @@ resource "google_compute_global_forwarding_rule" "web_http_8080" {
 resource "google_compute_target_http_proxy" "default" {
   name        = "api-target-proxy-http"
   description = "HTTP target proxy"
-  url_map     = google_compute_url_map.default.id
-}
-
-resource "google_compute_target_https_proxy" "web_https" {
-  name    = "web-target-proxy-https"
-  url_map = google_compute_url_map.default.id
-  ssl_certificates = [
-    google_compute_managed_ssl_certificate.web.self_link,
-  ]
-}
-
-resource "google_compute_target_https_proxy" "default" {
-  name    = "default-target-proxy-https"
-  url_map = google_compute_url_map.default.id
-  ssl_certificates = [
-    google_compute_managed_ssl_certificate.web.id,
-    google_compute_managed_ssl_certificate.wild_card.id
-  ]
+  url_map     = google_compute_url_map.https_redirect.id
 }
 
 resource "google_compute_target_https_proxy" "default_02" {
   name    = "default-target-proxy-https-02"
   url_map = google_compute_url_map.default.id
+  depends_on = [
+    google_compute_managed_ssl_certificate.wild_card_2
+  ]
   ssl_certificates = [
     google_compute_managed_ssl_certificate.wild_card_2.id
   ]
 }
 
-resource "google_compute_health_check" "default" {
-  provider = google-beta
-  name     = "health-check"
+resource "google_compute_health_check" "http" {
+  name = "health-check"
   http_health_check {
-    port = 80
+    request_path = "/_ah/warmup"
+    port_name    = "http"
   }
 }
 
