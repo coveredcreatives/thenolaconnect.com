@@ -98,7 +98,7 @@ func generate(w io.Writer, r *http.Request, db *gorm.DB, storagec *storage.Clien
 		_, _ = w.Write([]byte("bad request"))
 	}
 
-	retrieveURL := fmt.Sprintf("https://%s/retrieve?qr_encoded_data=%s", applicationconfig.EnvRetrieveHTTPSTriggerUrl, qrencodeddata)
+	retrieveURL := fmt.Sprintf("%s?qr_encoded_data=%s", applicationconfig.EnvRetrieveHTTPSTriggerUrl, qrencodeddata)
 	alog.WithField("url", retrieveURL).Info("stored retrieveURL for code")
 	qrCode, _ := qr.Encode(retrieveURL, qr.L, qr.Auto)
 	qrCode, _ = barcode.Scale(qrCode, 512, 512)
