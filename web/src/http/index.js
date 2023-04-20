@@ -4,7 +4,7 @@ const isLocalHost = window.location.origin.includes('localhost');
 
 export const getApiURL = () => {
     if (isLocalHost) {
-        return 'http://127.0.0.1:3001';
+        return 'http://127.0.0.1:8080';
     }
 
     return 'https://api.thenolaconnect.com';

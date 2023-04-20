@@ -1,8 +1,9 @@
 resource "google_compute_instance" "application_server" {
-  name         = "application-server"
-  machine_type = "e2-small"
-  zone         = "${var.region}-a"
-  tags         = ["web", "http-server", "https-server"]
+  name                      = "application-server"
+  machine_type              = "e2-small"
+  zone                      = "${var.region}-a"
+  tags                      = ["web", "http-server", "https-server"]
+  allow_stopping_for_update = true
   boot_disk {
     initialize_params {
       image = "debian-cloud/debian-11"
@@ -13,7 +14,7 @@ resource "google_compute_instance" "application_server" {
     network_ip = google_compute_address.private_ip_address.address
   }
   service_account {
-    email = local.service_account_email
+    email = var.google_application_service_account_email
     scopes = [
       "logging-write",
       "storage-rw",

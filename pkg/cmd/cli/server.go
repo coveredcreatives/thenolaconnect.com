@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 
@@ -12,6 +13,7 @@ import (
 	"github.com/spf13/viper"
 	"github.com/twilio/twilio-go"
 	cli "github.com/urfave/cli/v2"
+	"google.golang.org/api/forms/v1"
 	"google.golang.org/api/option"
 )
 
@@ -51,6 +53,11 @@ func Server(ctx *cli.Context, v *viper.Viper) error {
 		Password: twilioconfig.EnvAccountAuthToken,
 	})
 
+	forms_service, err := forms.NewService(context.Background())
+	if err != nil {
+		alog.WithError(err).Error("unable to initialize new service")
+	}
+
 	orderchan := make(chan int)
 
 	go internal_tools.ChannelOrdersToPrinter(v, gormdb, orderchan)
@@ -61,14 +68,8 @@ func Server(ctx *cli.Context, v *viper.Viper) error {
 		response.Write([]byte("ok"))
 	})
 
-	router.HandleFunc("/qr_mapping/generate", handlers.Generate(gormdb, storage_client, v))
-	router.HandleFunc("/qr_mapping/list", handlers.Retrieve(gormdb, storage_client))
-	router.HandleFunc("/qr_mapping/retrieve", handlers.Retrieve(gormdb, storage_client))
-
-	router.HandleFunc("/order_communication/generate", handlers.GenerateOrder(v, gormdb, storage_client, twilio_client))
-	router.HandleFunc("/order_communication/list", handlers.ListOrders(gormdb))
-	router.HandleFunc("/order_communication/deliver_to_kitchen", handlers.DeliverOrderToKitchen(gormdb, twilio_client, orderchan))
-	router.HandleFunc("/order_communication/sms", handlers.SMS(v, gormdb, twilio_client, orderchan))
+	handlers.LoadV1OrderCommunicationAPI(v, router, gormdb, storage_client, twilio_client, forms_service, orderchan)
+	handlers.LoadV1QRMappingAPI(v, router, gormdb, storage_client, twilio_client, orderchan)
 
 	application_config, err := devtools.ApplicationLoadConfig(v)
 	if err != nil {

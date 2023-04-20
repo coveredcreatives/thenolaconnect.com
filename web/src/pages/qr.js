@@ -29,7 +29,7 @@ export function GenerateQRCode() {
     )
 }
 
-function CreateQRForm(refetch) {
+function CreateQRForm({ refetch }) {
     const [form] = Form.useForm();
     const [label, setLabel] = React.useState("");
     const [file, setFile] = React.useState();
