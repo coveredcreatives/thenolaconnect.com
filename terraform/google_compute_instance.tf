@@ -45,7 +45,6 @@ DNS_RETRIEVE_TRIGGER_URL: ${google_cloudfunctions_function.qr_code_retrieve.http
 GOOGLE_APPLICATION_SERVICE_ACCOUNT_EMAIL: ${var.google_application_service_account_email}
 REACT_APP_GOOGLE_API_KEY: ${var.google_api_key}
 GOOGLE_STORAGE_BUCKET_NAME: ${data.google_storage_bucket.company_assets.name}
-GOOGLE_API_KEY_ORDERS: ${var.google_api_key}
 GOOGLE_FORM_ID_ORDERS: ${var.google_form_id_orders}
 TWILIO_ACCOUNT_SID: ${var.twilio_account_sid}
 TWILIO_ACCOUNT_AUTH_TOKEN: ${var.twilio_account_auth_token}

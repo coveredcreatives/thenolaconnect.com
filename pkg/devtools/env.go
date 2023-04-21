@@ -20,7 +20,6 @@ func Config() (v *viper.Viper, err error) {
 	v.BindEnv("HTTP_PORT")
 	v.BindEnv("DNS_PRINTER_IPV4_ADDRESS")
 	v.BindEnv("DNS_RETRIEVE_TRIGGER_URL")
-	v.BindEnv("GOOGLE_API_KEY_ORDERS")
 	v.BindEnv("GOOGLE_FORM_ID_ORDERS")
 	v.BindEnv("GOOGLE_APPLICATION_SERVICE_ACCOUNT_EMAIL")
 	v.BindEnv("GOOGLE_APPLICATION_CREDENTIALS")
@@ -57,8 +56,8 @@ type DatabaseConnectionConfig struct {
 type ApplicationConfig struct {
 	EnvName                    string `json:"ENV" mapstructure:"ENV"`
 	EnvHTTPPort                int    `json:"HTTP_PORT" mapstructure:"HTTP_PORT"`
-	EnvPrinterIPv4Address      string `json:"PRINTER_IPV4_ADDRESS" mapstructure:"PRINTER_IPV4_ADDRESS"`
-	EnvRetrieveHTTPSTriggerUrl string `json:"RETRIEVE_HTTPS_TRIGGER_URL" mapstructure:"RETRIEVE_HTTPS_TRIGGER_URL"`
+	EnvPrinterIPv4Address      string `json:"DNS_PRINTER_IPV4_ADDRESS" mapstructure:"DNS_PRINTER_IPV4_ADDRESS"`
+	EnvRetrieveHTTPSTriggerUrl string `json:"DNS_RETRIEVE_HTTPS_TRIGGER_URL" mapstructure:"DNS_RETRIEVE_HTTPS_TRIGGER_URL"`
 }
 
 type GoogleApplicationConfig struct {

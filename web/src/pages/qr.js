@@ -2,7 +2,7 @@ import * as React from 'react';
 import api, { getApiURL } from "../http"
 import { useQuery } from '@tanstack/react-query'
 
-import { UploadOutlined } from '@ant-design/icons';
+import { UploadOutlined, MinusOutlined } from '@ant-design/icons';
 import { Image, Card, Layout, Typography, Form, Row, Col, Badge, Upload, Button, Input, theme } from 'antd';
 
 const { Text } = Typography;
@@ -153,8 +153,6 @@ function ListQRMappings({ isLoading, isError, data }) {
                                                     </Text>
                                                 </Col>
                                             </Row>
-
-                                            <br />
                                             <Row>
                                                 <Col>
                                                     <Text>
@@ -165,7 +163,7 @@ function ListQRMappings({ isLoading, isError, data }) {
                                             <Row>
                                                 <Col>
                                                     <Text>
-                                                        <b>Redirects To:</b> <a target="_blank" rel="noreferrer" href={`http://${URL}/qr_mapping/retrieve?qr_encoded_data=${qrmapping.qr_encoded_data}`}>Link</a>
+                                                        <b>Redirects To:</b> <a target="_blank" rel="noreferrer" href={`${URL}/v1/qr_mapping/retrieve?qr_encoded_data=${qrmapping.qr_encoded_data}`}>Link</a>
                                                     </Text>
                                                 </Col>
                                             </Row>

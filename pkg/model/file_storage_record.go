@@ -8,7 +8,7 @@ import (
 
 type FileStorageRecord struct {
 	FileStorageRecordId int            `json:"file_storage_record_id" gorm:"column:file_storage_record_id;primaryKey;autoincrement;default:1"`
-	FileStoragedUrl     string         `json:"file_storage_url" gorm:"column:file_storage_url"`
+	FileStorageUrl      string         `json:"file_storage_url" gorm:"column:file_storage_url"`
 	CreatedAt           time.Time      `json:"created_at" gorm:"column:created_at"`
 	UpdatedAt           time.Time      `json:"updated_at" gorm:"column:updated_at"`
 	DeletedAt           gorm.DeletedAt `json:"deleted_at" gorm:"column:deleted_at"`
