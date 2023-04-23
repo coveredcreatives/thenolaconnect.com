@@ -16,7 +16,7 @@ export function Navigation() {
             <UnderlineNav.Link to="/orders" as={NavLink} className={(navData) => (navData.isActive ? 'active' : 'none')}>
                 Orders
             </UnderlineNav.Link>
-            <UnderlineNav.Link to="/orders/placement" as={NavLink} className={(navData) => (navData.isActive ? 'active' : 'none')}>
+            <UnderlineNav.Link href="https://docs.google.com/forms/d/e/1FAIpQLSeKe8iSippG-8wLxdPaGrL2Bpbqw6O8lofNN6gti98MX-YzOw/viewform" as="a">
                 Order Placement
             </UnderlineNav.Link>
         </UnderlineNav>

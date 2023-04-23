@@ -6,7 +6,7 @@ resource "google_compute_backend_service" "default" {
   timeout_sec = 15
 
   health_checks = [
-    google_compute_health_check.http.id,
+    data.google_compute_health_check.http.id,
   ]
   load_balancing_scheme = "EXTERNAL"
 

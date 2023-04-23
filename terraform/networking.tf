@@ -109,12 +109,17 @@ resource "google_compute_target_https_proxy" "default_02" {
   ]
 }
 
-resource "google_compute_health_check" "http" {
+# See data.google_compute_health_check.http, encountered issue where terraform raised 'The resource '...' already exists'
+# resource "google_compute_health_check" "http" {
+#   name = "health-check"
+#   http_health_check {
+#     request_path = "/_ah/warmup"
+#     port_name    = "http"
+#   }
+# }
+
+data "google_compute_health_check" "http" {
   name = "health-check"
-  http_health_check {
-    request_path = "/_ah/warmup"
-    port_name    = "http"
-  }
 }
 
 resource "google_compute_router" "router" {
