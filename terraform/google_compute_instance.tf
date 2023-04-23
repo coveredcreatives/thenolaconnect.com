@@ -82,6 +82,13 @@ echo "
 if $programname == 'thenolaconnect' then /var/log/thenolaconnect/output.log & stop
 " | sudo tee /etc/rsyslog.d/thenolaconnect.conf
 systemctl restart rsyslog.service
+# pull latest image from s3 and restart service
+echo "
+sudo gsutil cp gs://${google_storage_bucket.executables.name}/cli-linux-amd64@latest /bin/thenolaconnect
+sudo chmod +x /bin/thenolaconnect
+sudo systemctl restart thenolaconnect
+" > /home/devscrum/reload_latest.sh
+chmod +x /home/devscrum/reload_latest.sh
 SCRIPT
 }
 

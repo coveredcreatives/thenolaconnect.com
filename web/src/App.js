@@ -7,7 +7,9 @@ import {
 } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Layout } from 'antd';
-import Pages from './pages';
+import { Navigation } from './components/navigation';
+import { Footer } from './components/footer';
+import Pages from './pages'
 
 const queryClient = new QueryClient()
 
@@ -34,11 +36,11 @@ function FullLayout() {
   return (
     <div className="App">
       <Layout.Header>
-        <Pages.Navigation />
+        <Navigation />
       </Layout.Header>
       <Outlet />
       <Layout.Footer>
-        <Pages.Footer />
+        <Footer />
       </Layout.Footer>
     </div>
   )

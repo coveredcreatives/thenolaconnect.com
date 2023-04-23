@@ -25,7 +25,9 @@ const api = {
         }
     }),
     qr_mapping_list: () => httpClient.get(`/v1/qr_mapping/list`),
-    qr_mapping_retrieve: (id) => httpClient.get(`/v1/qr_mapping/retrieve?id=${id}`)
+    qr_mapping_retrieve: (qr_encoded_data) => httpClient.get(`/v1/qr_mapping/retrieve?qr_encoded_data=${qr_encoded_data}`),
+    qr_mapping_hide: (qr_encoded_data) => httpClient.get(`/v1/qr_mapping/hide?qr_encoded_data=${qr_encoded_data}`),
+    qr_mapping_show: (qr_encoded_data) => httpClient.get(`/v1/qr_mapping/show?qr_encoded_data=${qr_encoded_data}`)
 };
 
 export default api;
